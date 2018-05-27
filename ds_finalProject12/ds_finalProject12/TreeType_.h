@@ -216,27 +216,27 @@ Tree<_ItemType> Tree<_ItemType>::operator*(Tree<_ItemType>& operand)
 	bool finished1 = false;
 	bool finished2 = false;
 
-	//MakeInQueEmpty();
+	//makeInQueEmpty();		//이거 할 필요없음. 어짜피 inQue가 다 비어서 finished가 true값이 되어야 while문을 빠져나올 수 있으므로. 
+	finished1 = false;
 	ResetTree(IN_ORDER);
-	while (!finished1) {
+	while (!(finished1)) {
 		GetNextItem(getString1, IN_ORDER, finished1);
 
-		//operand.MakeInQueEmpty();
+		finished2 = false;
 		operand.ResetTree(IN_ORDER);
-		while (!finished2) {
+		while (!(finished2)) {
 			operand.GetNextItem(getString2, IN_ORDER, finished2);
+
+			//cout << getString1 << endl;		// test code
+			//cout << getString2 << endl;		// test code
 
 			if (getString1 == getString2) {
 				tempTreePtr.InsertItem(getString1);
-				//break;		// 이 Tree class에서는 같은 key값을 중복삽입할 수 없으므로, 동일한 것을 찾으면 다시 동일한 것을 또 찾는데 시간 쏟을 것이 아니라, 바로 다음 원소를 찾도록 한다.
+				break;		// 이 Tree class에서는 같은 key값을 중복삽입할 수 없으므로, 동일한 것을 찾으면 다시 동일한 것을 또 찾는데 시간 쏟을 것이 아니라, 바로 다음 원소를 찾도록 한다.
 			}
 		}
 	}
 
-	//MakeInQueEmpty();
-	//operand.MakeInQueEmpty();
-
-	tempTreePtr.Print();
 	return tempTreePtr;
 }
 
@@ -469,7 +469,6 @@ void Retrieve(TreeNode<ItemType>* tree, ItemType& item, bool& found)
 
 // Print & Print_Reverse ////////////////////////////////////////////////////////////
 /// Print ///
-void PrintTree(TreeNode<ItemType>* tree, std::ofstream& outFile);
 void PrintTree(TreeNode<ItemType>* tree);
 
 template<class _ItemType>
@@ -478,6 +477,20 @@ void Tree<_ItemType>::Print() const
 {
 	PrintTree(root);
 }
+
+void PrintTree(TreeNode<ItemType>* tree)
+// Prints info member of items in tree in sorted order on outFile.
+{
+	if (tree != NULL)
+	{
+		PrintTree(tree->leftPtr);   // Print leftPtr subtree.
+		cout << tree->info << endl;
+		//outFile << tree->info << endl;
+		PrintTree(tree->rightPtr);  // Print rightPtr subtree.
+	}
+}
+
+void PrintTree(TreeNode<ItemType>* tree, std::ofstream& outFile);
 
 template<class _ItemType>
 void Tree<_ItemType>::Print(std::ofstream& outFile) const
@@ -495,18 +508,6 @@ void PrintTree(TreeNode<ItemType>* tree, std::ofstream& outFile)
 		cout << tree->info << endl;
 		outFile << tree->info << endl;
 		PrintTree(tree->rightPtr, outFile);  // Print rightPtr subtree.
-	}
-}
-
-void PrintTree(TreeNode<ItemType>* tree)
-// Prints info member of items in tree in sorted order on outFile.
-{
-	if (tree != NULL)
-	{
-		PrintTree(tree->leftPtr);   // Print leftPtr subtree.
-		cout << tree->info << endl;
-		//outFile << tree->info << endl;
-		PrintTree(tree->rightPtr);  // Print rightPtr subtree.
 	}
 }
 ///
