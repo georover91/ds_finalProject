@@ -16,7 +16,8 @@ public:
 	//~DbManager();
 	void goBackward();
 	void goForward();
-	void Search_in_myCurrDb();	//Tree<_ItemType>* myCurrDbPtr 는 맴버변수이므로, 맴버함수의 인수로 추가할 필요 없음.
+	void Search();	//Tree<_ItemType>* myCurrDbPtr 는 맴버변수이므로, 맴버함수의 인수로 추가할 필요 없음.
+	void Search_strings_that_have_the_key_from_(Tree<_ItemType>*& baseDbPtr, Tree<_ItemType>*& newDbPtr);
 	void Search_and(Tree<_ItemType>*& newDbPtr);
 	void Search_or(Tree<_ItemType>*& newDbPtr);
 	void Search_not(Tree<_ItemType>*& newDbPtr);
@@ -26,12 +27,12 @@ public:
 	//void Insert_tree_to_DoubleLL(Tree<_ItemType>* itemPtr);
 	//void Insert_oper_to_DoubleLL(_ItemType key);
 	//void Insert_key_to_DoubleLL(_ItemType itemPtr);
-	void Print_myCurrDb(std::ofstream& outFile);
+	void Print_myCurrDb();
 	void Print_to_myWriting();
 	void Print_to_file();
 
-	int searchNum;
 	int cumNum;
+	int searchNum;
 	string command;
 	string oper;
 	string key;

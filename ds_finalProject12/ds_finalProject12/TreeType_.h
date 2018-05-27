@@ -98,20 +98,6 @@ void Tree<_ItemType>::operator=(const Tree<_ItemType>& originalTree)
 }
 */
 
-template<class _ItemType>
-void Tree<_ItemType>::operator=(const Tree<_ItemType>& originalTree)
-// Calls recursive function CopyTree to copy originalTree 
-// into root.
-{
-	{
-		if (&originalTree == this)
-			return;             // Ignore assigning self to self
-		Destroy(root);      // Deallocate existing tree nodes
-		CopyTree(root, originalTree.RootIs());
-	}
-
-}
-
 void CopyTree(TreeNode<ItemType>*& copy, const TreeNode<ItemType>* originalTree)
 // Post: copy is the root of a tree that is a duplicate 
 //       of originalTree.
@@ -125,30 +111,47 @@ void CopyTree(TreeNode<ItemType>*& copy, const TreeNode<ItemType>* originalTree)
 		CopyTree(copy->leftPtr, originalTree->leftPtr);
 		CopyTree(copy->rightPtr, originalTree->rightPtr);
 	}
+} // Function prototypes for auxiliary functions.
+
+template<class _ItemType>
+void Tree<_ItemType>::operator=(const Tree<_ItemType>& originalTree)
+// Calls recursive function CopyTree to copy originalTree 
+// into root.
+{
+	{
+		if (&originalTree == this)
+			return;             // Ignore assigning self to self
+		Destroy(root);      // Deallocate existing tree nodes
+		CopyTree(root, originalTree.RootIs());
+	}
+
 }
-// Function prototypes for auxiliary functions.
 ////
 
 
 
-// Merge & Extract //////////////////////////////
+// operator+(Merge) & operator-(Extract) & operator* //////////////////////////////
 template<class _ItemType>
 Tree<_ItemType> Tree<_ItemType>::operator+(Tree<_ItemType>& operand)
 {
-	Tree<_ItemType>* tempTreePtr;
-	tempTreePtr = new Tree<_ItemType>;
-	*tempTreePtr = *this;
+	Tree<_ItemType> tempTree;
+	tempTree = *this;
 
 	_ItemType tempItem;
 	bool finished = false;
+	bool found = true;		//RetrieveItem 함수 안에서 false로 초기화 됨.
 
 	operand.ResetTree(IN_ORDER);
 	while (!finished) {
 		operand.GetNextItem(tempItem, IN_ORDER, finished);
-		(*tempTreePtr).InsertItem(tempItem);
+		tempTree.RetrieveItem(tempItem, found);
+		if (!found) {
+			tempTree.InsertItem(tempItem);
+		}
+		//else {}
 	}
 
-	return (*tempTreePtr);
+	return tempTree;
 }
 
 template<class _ItemType>
@@ -167,25 +170,25 @@ void Tree<_ItemType>::Merge(Tree<_ItemType>& operand)
 template<class _ItemType>
 Tree<_ItemType> Tree<_ItemType>::operator-(Tree<_ItemType>& operand)
 {
-	Tree<_ItemType>* tempTreePtr;
-	tempTreePtr = new Tree<_ItemType>;
-	*tempTreePtr = *this;
+	Tree<_ItemType> tempTree;
+	tempTree = *this;
 
 	_ItemType tempItem;
 	bool finished = false;
 	bool found = true;
 
-	operand.ResetTree(IN_ORDER);
-	while (!finished) {
-		operand.GetNextItem(tempItem, IN_ORDER, finished);
-		(*tempTreePtr).RetrieveItem(tempItem, found);
-		if (found) {
-			(*tempTreePtr).DeleteItem(tempItem);
+	if (!operand.IsEmpty()) {		//operand.IsEmpty() == true이면, *this를 반환하도록 하기 위함.
+		operand.ResetTree(IN_ORDER);
+		while (!finished) {
+			operand.GetNextItem(tempItem, IN_ORDER, finished);		//operand 트리에 원소가 하나도 없으면, operand의 inQue에서 Dequeue할 때, 할당하지 않은 메모리 참조 오류남.
+			tempTree.RetrieveItem(tempItem, found);
+			if (found) {
+				tempTree.DeleteItem(tempItem);
+			}
 		}
-		else {}
 	}
 
-	return (*tempTreePtr);
+	return tempTree;
 }
 
 template<class _ItemType>
@@ -209,7 +212,7 @@ void Tree<_ItemType>::Extract(Tree<_ItemType>& operand)
 template<class _ItemType>
 Tree<_ItemType> Tree<_ItemType>::operator*(Tree<_ItemType>& operand)
 {
-	Tree<_ItemType> tempTreePtr;
+	Tree<_ItemType> tempTree;
 
 	_ItemType getString1;
 	_ItemType getString2;
@@ -231,13 +234,13 @@ Tree<_ItemType> Tree<_ItemType>::operator*(Tree<_ItemType>& operand)
 			//cout << getString2 << endl;		// test code
 
 			if (getString1 == getString2) {
-				tempTreePtr.InsertItem(getString1);
+				tempTree.InsertItem(getString1);
 				break;		// 이 Tree class에서는 같은 key값을 중복삽입할 수 없으므로, 동일한 것을 찾으면 다시 동일한 것을 또 찾는데 시간 쏟을 것이 아니라, 바로 다음 원소를 찾도록 한다.
 			}
 		}
 	}
 
-	return tempTreePtr;
+	return tempTree;
 }
 
 /*		// 이렇게 함수 안에서 포이트 선언하고, 그 포인터에 객체를 동적할당 하고, 그 포인터가 가리키는 객체를 반환하는 것으로 하면, 그 함수내에서 동적할당된 객체가 함수 밖으로 제대로 전달 안된다. 그 동적할당된 객체의 포인터를 반환하는 것은 제대로 리턴 될듯. 
@@ -341,13 +344,13 @@ template<class _ItemType>
 void Tree<_ItemType>::InsertItem(_ItemType item)
 // Calls recursive function Insert to insert item into tree.
 {
-	bool found;
-	Retrieve(root, item, found);
+	//bool found;
+	//Retrieve(root, item, found);
 	
-	if (!found) {
+	//if (!found) {
 		Insert(root, item);
 		length++;
-	}
+	//}
 }
 
 

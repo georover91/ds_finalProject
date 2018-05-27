@@ -39,8 +39,6 @@ DbManager<_ItemType>::DbManager(Tree<_ItemType> T1)
 template<class _ItemType>
 void DbManager<_ItemType>::goBackward()
 {
-	Tree<_ItemType>* tempDbPtr = myCurrDbPtr;		// 1. 현재 myCurrDbPtr 값 백업.
-
 	if (myCurrDbPtr == allDbPtr) {		//현재 myCurrDb가 allDb이면,
 		cout << "더이상 뒤로 되돌릴 Data Base History가 없습니다." << endl;
 		return;	//아무 실행 안하고 함수 종료.
@@ -48,37 +46,14 @@ void DbManager<_ItemType>::goBackward()
 	else {
 		//myCurrDbPtr////
 		myDbForwardStack.Push(myCurrDbPtr);		// go forward 명령어 실행에 대비해, myDbForwardStack에 현재 myCurrDbPtr값 저장.
-		//myDbBackStack.Top(myCurrDbPtr);
 		myDbBackStack.Pop();
 		myDbBackStack.Top(myCurrDbPtr);		// myCurrDbPtr 값이 back스택에도 가장 위에 남아있도록 항상 실시간상태를 유지.
-
-		//command////
 
 		//oper////
 		operDoubleLL.GoToBeforePos();
 
 		//key////
 		keyDoubleLL.GoToBeforePos();
-
-		/*
-		//oper////
-		operForwardStack.Push(oper);
-		//operBackStack.Top(oper);
-		operBackStack.Pop();
-		if (!operBackStack.IsEmpty()) {	// BackStack이 비어있음에도 Top() 맴버함수를 실행하는 것을 방지하기 위한 코딩. 초기DbPtr로 되돌리는 경우를 고려한 코딩. 
-			operBackStack.Top(oper);
-		}
-		else {}	
-
-		//key
-		keyForwardStack.Push(key);
-		//keyBackStack.Top(key);
-		keyBackStack.Pop();
-		if (!operBackStack.IsEmpty()) {	// BackStack이 비어있음에도 Top() 맴버함수를 실행하는 것을 방지하기 위한 코딩. 초기DbPtr로 되돌리는 경우를 고려한 코딩. 
-			keyBackStack.Top(key);
-		}
-		else {}
-		*/
 	}
 
 	searchNum--;
@@ -87,8 +62,6 @@ void DbManager<_ItemType>::goBackward()
 template<class _ItemType>
 void DbManager<_ItemType>::goForward()
 {
-	//Tree<_ItemType>* tempDbPtr = myCurrDbPtr;		// 1. 현재 myCurrDbPtr 값 백업.
-
 	if (myDbForwardStack.IsEmpty()) {		// 앞으로갈 저장상태가 없으면,
 		cout << "더이상 앞로 되돌릴 Data Base History가 없습니다." << endl;
 		return;	//아무 실행 안하고 함수 종료.
@@ -104,23 +77,6 @@ void DbManager<_ItemType>::goForward()
 
 		//key////
 		keyDoubleLL.GoToNextPos();
-
-		/*
-		//command
-		//comForwardStack.Top(command);
-		//comForwardStack.Pop();
-		//comBackStack.Push(command);
-
-		//oper
-		operForwardStack.Top(oper);
-		operForwardStack.Pop();
-		operBackStack.Push(oper);
-
-		//key
-		keyForwardStack.Top(key);
-		keyForwardStack.Pop();
-		keyBackStack.Push(key);
-		*/
 	}
 
 	searchNum++;
@@ -131,17 +87,17 @@ void DbManager<_ItemType>::goForward()
 
 // Search & Insert /////////////////////////////////////////////////////////
 template<class _ItemType>
-void DbManager<_ItemType>::Search_in_myCurrDb()
+void DbManager<_ItemType>::Search()
 // 받은 oper과 key 값을 backStack에 저장까지 해줌.
 {
 	Tree<_ItemType>* newDbPtr;
 	newDbPtr = new Tree<_ItemType>;		// 새 myDb 생성.
 
-	if (myCurrDbPtr->IsEmpty()) {
-		cout << "Current data base is empty, so that it can't be searched." << endl;
-		//cout << "Blank DB has been produced." << endl;
-	}
-	else {		
+	//if (myCurrDbPtr->IsEmpty()) {
+	//	cout << "Current data base is empty, so that it can't be searched." << endl;
+	//	//cout << "Blank DB has been produced." << endl;
+	//}
+	//else {		
 		string getString;
 		//bool finished = false;
 		if (oper == "and") {
@@ -159,64 +115,48 @@ void DbManager<_ItemType>::Search_in_myCurrDb()
 		else if (oper == "or not") {
 			Search_or_not(newDbPtr);
 		}
-		else {
-			// 잘못된 oper을 입력하였으면, 아무 작업안하고 함수 빠져나감. 밖에서 oper입력 반복.
-		}
-	}
+		//else {
+		//	// 잘못된 oper을 입력하였으면, 아무 작업안하고 함수 빠져나감. 밖에서 oper입력 반복.
+		//}
+	//}
 
 	myDbBackStack.Push(newDbPtr);
 	myDbForwardStack.MakeEmpty();
 	myCurrDbPtr = newDbPtr;
 
 	operDoubleLL.Insert_with_Deleting_nextPos(oper);
-
 	keyDoubleLL.Insert_with_Deleting_nextPos(key);
-
-	/*
-	//comBackStack.Push(command);		
-	//comForwardStack.MakeEmpty();
-	operBackStack.Push(oper);
-	operForwardStack.MakeEmpty();
-	keyBackStack.Push(key);
-	keyForwardStack.MakeEmpty();
-	*/
 
 	searchNum++;
 }
 
 template<class _ItemType>
-void DbManager<_ItemType>::Search_and(Tree<_ItemType>*& newDbPtr)
+void DbManager<_ItemType>::Search_strings_that_have_the_key_from_(Tree<_ItemType>*& baseDbPtr, Tree<_ItemType>*& newDbPtr)
 {
-
-	string getString;
+	_ItemType getString;
 	bool finished = false;
-	myCurrDbPtr->ResetTree(IN_ORDER);
+
+	baseDbPtr->ResetTree(IN_ORDER);
 	while (!finished) {
-		myCurrDbPtr->GetNextItem(getString, IN_ORDER, finished);
+		baseDbPtr->GetNextItem(getString, IN_ORDER, finished);
 		if (getString.find(key) != string::npos) {
 			newDbPtr->InsertItem(getString);
 		}
 	}
-	
-	(*newDbPtr) = ((*myCurrDbPtr) * (*newDbPtr));
+}
+
+template<class _ItemType>
+void DbManager<_ItemType>::Search_and(Tree<_ItemType>*& newDbPtr)
+{
+	Search_strings_that_have_the_key_from_(myCurrDbPtr, newDbPtr);
+	//(*newDbPtr) = ((*myCurrDbPtr) * (*newDbPtr));
 }
 
 template<class _ItemType>
 void DbManager<_ItemType>::Search_or(Tree<_ItemType>*& newDbPtr)
 {
-	string getString;
-	bool finished = false;
-	allDbPtr->ResetTree(IN_ORDER);
-	while (!finished) {
-		allDbPtr->GetNextItem(getString, IN_ORDER, finished);
-		if (getString.find(key) != string::npos) {
-			newDbPtr->InsertItem(getString);
-		}
-	}
-
-	Tree<_ItemType> tempDb = (*myCurrDbPtr);
-	(*newDbPtr) = tempDb + (*newDbPtr);
-	
+	Search_strings_that_have_the_key_from_(allDbPtr, newDbPtr);
+	(*newDbPtr) = (*myCurrDbPtr) + (*newDbPtr);
 }
 
 template<class _ItemType>
@@ -224,23 +164,15 @@ void DbManager<_ItemType>::Search_not(Tree<_ItemType>*& newDbPtr)
 {
 	if (key != "\0") {
 		// 초기 데이터베이스에서 key값이 들어간 문자열을 찾아낸 후
-		string getString;
-		bool finished = false;
-		allDbPtr->ResetTree(IN_ORDER);
-		while (!finished) {
-			allDbPtr->GetNextItem(getString, IN_ORDER, finished);
-			if (getString.find(key) != string::npos) {
-				newDbPtr->InsertItem(getString);
-			}
-		}
-		Tree<_ItemType> tempDb = (*allDbPtr);
-		tempDb.Extract(*newDbPtr);		// 전체 데이터베이스에서 'key값으로 검색된 위 새 임시Db'(*newDbPtr)를 제외한다.
-		(*newDbPtr) = tempDb;		// 그리고 다시 newDb(*newDbPtr)에 그 결과Db(tempDb)를 넣어준다.
+		Search_strings_that_have_the_key_from_(allDbPtr, newDbPtr);
+
+		// 전체 데이터베이스에서 'key값으로 검색된 Db'(*newDbPtr)를 제외한다.
+		(*newDbPtr) = (*allDbPtr) - (*newDbPtr);	
 	}
 	else {		// key == NULL
-		Tree<_ItemType> tempDb = (*allDbPtr);
-		tempDb.Extract(*myCurrDbPtr);		// 전체 데이터베이스에서 'key값으로 검색된 위 새 임시Db'(*newDbPtr)를 제외한다.
-		(*newDbPtr) = tempDb;
+		(*newDbPtr) = (*allDbPtr) - (*myCurrDbPtr);
+
+		// 전체 데이터베이스에서 'key값으로 검색된 위 새 임시Db'(*newDbPtr)를 제외한다.
 	}
 	
 }
@@ -249,17 +181,20 @@ template<class _ItemType>
 void DbManager<_ItemType>::Search_and_not(Tree<_ItemType>*& newDbPtr)
 {
 	Search_not(newDbPtr);
-
-	(*newDbPtr) = (*myCurrDbPtr) * (*newDbPtr);		//*myCurrDbPtr와 *newDbPtr는 원본보존됨.
+	(*newDbPtr) = (*myCurrDbPtr) * (*newDbPtr);		// 여기서 (*newDbPtr)는 key값을 가진 문자열들의 여집합에 해당함. 
+													//*myCurrDbPtr는 원본보존됨.
+	//Search_strings_that_have_the_key_from_(myCurrDbPtr, newDbPtr);
+	//(*newDbPtr) = (*myCurrDbPtr) - (*newDbPtr);					// 이 경우는 [not 이고, key가 "\0"인 경우]를 포함 못하나?
 }
 
 template<class _ItemType>
 void DbManager<_ItemType>::Search_or_not(Tree<_ItemType>*& newDbPtr)
 {
 	Search_not(newDbPtr);
-
 	(*newDbPtr) = (*myCurrDbPtr) + (*newDbPtr);		//*myCurrDbPtr와 *newDbPtr는 원본보존됨.
 }
+
+// Tree같 +, -, * 연산 중 *연산이 제일 오래 걸릴 것임. +와 - 연산은 비슷할 것임.
 
 
 
@@ -331,9 +266,9 @@ void DbManager<_ItemType>::Insert_key_to_DoubleLL(_ItemType key)
 
 // Print ////////////////////////////////////////////////////////////////////
 template<class _ItemType>
-void DbManager<_ItemType>::Print_myCurrDb(std::ofstream& outFile)
+void DbManager<_ItemType>::Print_myCurrDb()
 {
-	myCurrDbPtr->Print(outFile);
+	myCurrDbPtr->Print();
 }
 
 template<class _ItemType>

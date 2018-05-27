@@ -11,48 +11,35 @@ int main()
 	//프로젝트 본문 시작.
 	Tree<ItemType> T1;
 
-	string command;
-	ItemType dataLine;
-	int numCommands;
+	string command_data;
+	//int numCommands;
 	int numData;
 
-	ifstream inFile1("in1.txt");	//초기 데이터 베이스는 파일(초기DB구성파일) 하나에서 읽어와 구성.
-	numCommands = 0;
+	ifstream inFile("in.txt");	//초기 데이터 베이스는 파일(초기DB구성파일) 하나에서 읽어와 구성.
+	//numCommands = 0;
 	numData = 0;
-	if (!inFile1.is_open()) {
+	if (!inFile.is_open()) {
 		cout << "데이터 베이스를 구성할 파일을 열 수 없습니다." << endl;
 	}
 	else {
-		getline(inFile1, command);	// '초기DB구성파일'의 한 줄을 명령으로 받아옴.
-		while (command != "Quit")
-		{
-			if (command == "InsertStrings") {
-				getline(inFile1, dataLine);
-				T1.InsertItem(dataLine);
+		getline(inFile, command_data);	// '초기DB구성파일'의 한 줄을 명령으로 받아옴.
+		if (command_data == "InsertStrings") {
+			getline(inFile, command_data);
+			while (command_data != "Quit") {	// 입력파일의 입력문장들을 하나씩 게속 읽어들인다.
+				T1.InsertItem(command_data);
 				numData++;
-				cout << numData << "th dataLine input: " << dataLine << endl;
-				numCommands++;
-				cout << numCommands << "th command  input: " << command << " completed." << endl;
+				cout << numData << "th data has been inputed: " << command_data << endl;
+				getline(inFile, command_data);
 			}
-			//else if () {
-			//
-			//}
-			else {
-				getline(inFile1, dataLine);
-				dataLine = "\0";
-				numData++;
-				cout << numData << "th dataLine input: " << "Nullified!" << endl;
-				numCommands++;
-				command = "Command Error!";
-				cout << numCommands << "th command  input: " << command << endl;
-			}
-
-			getline(inFile1, command);
-		};
-		inFile1.close();
+		}
+		else {
+			cout << "Command Error. or Data Error." << endl;
+		}
+		
+		inFile.close();
 	}
 
-	ofstream outFile1("out1.txt");		// 내가 찾은 문자열을 저장하는 텍스트 파일.
+	ofstream outFile("out.txt");		// 내가 찾은 문자열을 저장하는 텍스트 파일.
 	ofstream garbage("garbage.txt");	//그냥 cout으로만 출력하고 싶을 때, ofstream으로 출력되는 값을 한곳에 모아 출력하여, 버릴때 쓰는 출력 파일스트림.
 
 	cout << endl;
@@ -71,7 +58,7 @@ int main()
 	cout << "<<<" << DbM.cumNum << "번째 명령." << ">>>" << endl;
 	cout << "프로그램 실행명령을 입력하세요: ";
 	getline(cin, DbM.command);
-	// (command의 history를 저장할 필요없다. 따라서 command를 저장할 backStack 또는 forwardStack을 만들 필요는 없다.)
+	// (command의 history를 저장할 필요없다. 따라서 command를 저장할 backStack, forwardStack 또는 DoubleLL을 만들 필요는 없다.)
 
 	while (DbM.command != "Quit")
 	{
@@ -80,7 +67,7 @@ int main()
 
 			cout << endl;
 			cout << "<<<" << DbM.searchNum << "번째 검색." << ">>>" << endl;
-			DbM.Print_myCurrDb(garbage);
+			DbM.Print_myCurrDb();
 			cout << endl;
 		}
 		else if (DbM.command == "go forward") {
@@ -88,7 +75,7 @@ int main()
 
 			cout << endl;
 			cout << "<<<" << DbM.searchNum << "번째 검색." << ">>>" << endl;
-			DbM.Print_myCurrDb(garbage);
+			DbM.Print_myCurrDb();
 			cout << endl;
 		}
 		else if (DbM.command == "search") {
@@ -103,18 +90,24 @@ int main()
 			cout << "검색 키워드를 입력하세요: ";
 			getline(cin, DbM.key);
 			
-			DbM.Search_in_myCurrDb();
+			DbM.Search();
 
 			cout << endl;
 			cout << "<<<" << DbM.searchNum << "번째 검색." << ">>>" << endl;
-			DbM.Print_myCurrDb(garbage);
+			DbM.Print_myCurrDb();
 			cout << endl;
 		}
-		//else if () {
-		//
-		//}
-		else {
-			
+		else if (DbM.command == "all data") {
+
+		}
+		else if (DbM.command == "initialize") {
+
+		}
+		else if (DbM.command == "select") {
+
+		}
+		else if (DbM.command == "print") {
+
 		}
 
 		cout << endl;
@@ -126,50 +119,6 @@ int main()
 	};
 
 
-
-
-	
-
-
-
-	// 본격적이었던 string DB 검색 프로그램을 실행 종료.
-	// 프로젝트 본문 끝.
-
-
-
-	/* //초기DB구성파일 잘 읽혔는지 Test 시작.
-	T1.Print(garbage);
-	cout << endl;
-	garbage << endl;
-	T1.Print_Reverse(garbage);
-	cout << endl;
-	garbage << endl;
-	*/ ////초기DB구성파일 잘 읽혔는지 Test 끝.
-
-
-
-	/* //TreeType의 merge함수 Test 시작.
-	ofstream outFile("garbage.txt");
-
-	Tree<ItemType> tem1;
-	tem1.InsertItem("a");
-	tem1.InsertItem("b");
-	tem1.InsertItem("c");
-	tem1.Print(outFile);
-	cout << endl;
-
-	Tree<ItemType> tem2;
-	tem2.InsertItem("d");
-	tem2.InsertItem("e");
-	tem2.InsertItem("f");
-	tem2.Print(outFile);
-	cout << endl;
-	
-	Tree<ItemType> tem3;
-	tem1.Merge(tem2);
-	tem3 = tem1;
-	tem3.Print(outFile);
-	*/ //TreeType의 merge함수 Test 끝.
 
 	return 0;
 }
