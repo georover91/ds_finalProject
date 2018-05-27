@@ -1,5 +1,23 @@
 #include "TreeType.h"
 
+// 1.	Test t1;		=> 기본 생성자
+//		Test t2(t1);	=> 복사 생성자
+//		Test t3 = t1;	=> 복사 생성자
+//		t1 = t2;		=> 복사 대입 연산자
+//
+//		cout << isEmpty(t1) << endl; = > Call - by - Value는 복사 생성자	// 즉, IsEmpty함수에 인수로 t1이 전달될 때에는, 함수 내에서 Test t(t1)시의 복사생성자가 작용하는 것과 같다.
+//
+//		bool isEmpty(Test t) {
+//			if (t.getMember() == 0)
+//				return true;
+//			return false;
+//		}
+//
+// 2.	'대입연산자'와 '할당연산자'는 같은 말이다. 즉 둘 모두 'operator='를 의미.
+// 3.	객체에는 기본적으로 컴파일러가 제공하는 '디폴트 대입연산자'가 있다.
+//		이 '디폴트 대입연산자'는 엄연히 '디폴트 생성자'와는 다르다.
+//		'대입연산자'와 '생성자'는 다른 것이므로 위도 서로 다른 것은 당연한 사실일 것이다.
+/////////////////////////////
 
 
 // Class constructor & Class Destructor & MakeEmpty /////////////////////////////////
@@ -42,6 +60,12 @@ void Tree<_ItemType>::MakeEmpty()
 	root = NULL;
 	length = 0;
 }
+
+template<class _ItemType>
+void Tree<_ItemType>::MakeInQueEmpty()
+{
+	inQue.MakeEmpty();
+}
 ///
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -58,8 +82,24 @@ Tree<_ItemType>::Tree(const Tree<_ItemType>& originalTree)
 	CopyTree(root, originalTree.root);
 }
 
+/*
 template<class _ItemType>
 void Tree<_ItemType>::operator=(const Tree<_ItemType>& originalTree)
+// Calls recursive function CopyTree to copy originalTree 
+// into root.
+{
+	{
+		if (&originalTree == this)
+			return;             // Ignore assigning self to self
+		Destroy(root);      // Deallocate existing tree nodes
+		CopyTree(root, originalTree.RootIs());
+	}
+
+}
+*/
+
+template<class _ItemType>
+void Tree<_ItemType>::operator=(Tree<_ItemType> originalTree)
 // Calls recursive function CopyTree to copy originalTree 
 // into root.
 {
@@ -93,9 +133,22 @@ void CopyTree(TreeNode<ItemType>*& copy, const TreeNode<ItemType>* originalTree)
 
 // Merge & Extract //////////////////////////////
 template<class _ItemType>
-Tree<_ItemType> Tree<_ItemType>::operator+(Tree<_ItemType>& originalTree)
+Tree<_ItemType> Tree<_ItemType>::operator+(Tree<_ItemType>& operand)
 {
+	Tree<_ItemType>* tempTreePtr;
+	tempTreePtr = new Tree<_ItemType>;
+	*tempTreePtr = *this;
 
+	_ItemType tempItem;
+	bool finished = false;
+
+	operand.ResetTree(IN_ORDER);
+	while (!finished) {
+		operand.GetNextItem(tempItem, IN_ORDER, finished);
+		(*tempTreePtr).InsertItem(tempItem);
+	}
+
+	return (*tempTreePtr);
 }
 
 template<class _ItemType>
@@ -112,9 +165,27 @@ void Tree<_ItemType>::Merge(Tree<_ItemType>& operand)
 }
 
 template<class _ItemType>
-Tree<_ItemType> Tree<_ItemType>::operator-(Tree<_ItemType>& originalTree)
+Tree<_ItemType> Tree<_ItemType>::operator-(Tree<_ItemType>& operand)
 {
+	Tree<_ItemType>* tempTreePtr;
+	tempTreePtr = new Tree<_ItemType>;
+	*tempTreePtr = *this;
 
+	_ItemType tempItem;
+	bool finished = false;
+	bool found = true;
+
+	operand.ResetTree(IN_ORDER);
+	while (!finished) {
+		operand.GetNextItem(tempItem, IN_ORDER, finished);
+		(*tempTreePtr).RetrieveItem(tempItem, found);
+		if (found) {
+			(*tempTreePtr).DeleteItem(tempItem);
+		}
+		else {}
+	}
+
+	return (*tempTreePtr);
 }
 
 template<class _ItemType>
@@ -136,10 +207,73 @@ void Tree<_ItemType>::Extract(Tree<_ItemType>& operand)
 }
 
 template<class _ItemType>
-void Tree<_ItemType>::operator*(Tree<_ItemType>& originalTree)
+Tree<_ItemType> Tree<_ItemType>::operator*(Tree<_ItemType>& operand)
 {
+	Tree<_ItemType> tempTreePtr;
 
+	_ItemType getString1;
+	_ItemType getString2;
+	bool finished1 = false;
+	bool finished2 = false;
+
+	MakeInQueEmpty();
+	ResetTree(IN_ORDER);
+	while (!finished1) {
+		GetNextItem(getString1, IN_ORDER, finished1);
+
+		operand.MakeInQueEmpty();
+		operand.ResetTree(IN_ORDER);
+		while (!finished2) {
+			operand.GetNextItem(getString2, IN_ORDER, finished2);
+
+			if (getString1 == getString2) {
+				tempTreePtr.InsertItem(getString1);
+				break;		// 이 Tree class에서는 같은 key값을 중복삽입할 수 없으므로, 동일한 것을 찾으면 다시 동일한 것을 또 찾는데 시간 쏟을 것이 아니라, 바로 다음 원소를 찾도록 한다.
+			}
+		}
+	}
+
+	//MakeInQueEmpty();
+	//operand.MakeInQueEmpty();
+	tempTreePtr.Print();
+	return tempTreePtr;
 }
+
+/*		// 이렇게 함수 안에서 포이트 선언하고, 그 포인터에 객체를 동적할당 하고, 그 포인터가 가리키는 객체를 반환하는 것으로 하면, 그 함수내에서 동적할당된 객체가 함수 밖으로 제대로 전달 안된다. 그 동적할당된 객체의 포인터를 반환하는 것은 제대로 리턴 될듯. 
+template<class _ItemType>
+Tree<_ItemType> Tree<_ItemType>::operator*(Tree<_ItemType>& operand)
+{
+	Tree<_ItemType>* tempTreePtr;
+	tempTreePtr = new Tree<_ItemType>;
+
+	string getString1;
+	string getString2;
+	bool finished1 = false;
+	bool finished2 = false;
+
+	MakeInQueEmpty();
+	ResetTree(IN_ORDER);
+	while (!finished1) {
+		GetNextItem(getString1, IN_ORDER, finished1);
+
+		operand.MakeInQueEmpty();
+		operand.ResetTree(IN_ORDER);
+		while (!finished2) {
+			operand.GetNextItem(getString2, IN_ORDER, finished2);
+
+			if (getString1 == getString2) {
+				InsertItem(getString1);
+				break;		// 이 Tree class에서는 같은 key값을 중복삽입할 수 없으므로, 동일한 것을 찾으면 다시 동일한 것을 또 찾는데 시간 쏟을 것이 아니라, 바로 다음 원소를 찾도록 한다.
+			}
+		}
+	}
+
+	//MakeInQueEmpty();
+	//operand.MakeInQueEmpty();
+
+	return *tempTreePtr;
+}
+*/
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -335,6 +469,14 @@ void Retrieve(TreeNode<ItemType>* tree, ItemType& item, bool& found)
 // Print & Print_Reverse ////////////////////////////////////////////////////////////
 /// Print ///
 void PrintTree(TreeNode<ItemType>* tree, std::ofstream& outFile);
+void PrintTree(TreeNode<ItemType>* tree);
+
+template<class _ItemType>
+void Tree<_ItemType>::Print() const
+// Calls recursive function Print to print items in the tree.
+{
+	PrintTree(root);
+}
 
 template<class _ItemType>
 void Tree<_ItemType>::Print(std::ofstream& outFile) const
@@ -352,6 +494,18 @@ void PrintTree(TreeNode<ItemType>* tree, std::ofstream& outFile)
 		cout << tree->info << endl;
 		outFile << tree->info << endl;
 		PrintTree(tree->rightPtr, outFile);  // Print rightPtr subtree.
+	}
+}
+
+void PrintTree(TreeNode<ItemType>* tree)
+// Prints info member of items in tree in sorted order on outFile.
+{
+	if (tree != NULL)
+	{
+		PrintTree(tree->leftPtr);   // Print leftPtr subtree.
+		cout << tree->info << endl;
+		//outFile << tree->info << endl;
+		PrintTree(tree->rightPtr);  // Print rightPtr subtree.
 	}
 }
 ///

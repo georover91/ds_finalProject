@@ -95,7 +95,7 @@ int main()
 			while (1) {
 				cout << "검색 연산자를 입력하세요: ";
 				getline(cin, DbM.oper);
-				if ((DbM.oper == "and") || (DbM.oper == "or") || (DbM.oper == "not")) {
+				if ((DbM.oper == "and") || (DbM.oper == "or") || (DbM.oper == "not") || (DbM.oper == "and not") || (DbM.oper == "or not")) {
 					break;
 				}
 			}

@@ -196,7 +196,8 @@ void DbManager<_ItemType>::Search_and(Tree<_ItemType>*& newDbPtr)
 			newDbPtr->InsertItem(getString);
 		}
 	}
-
+	
+	(*newDbPtr) = (*myCurrDbPtr) *(*newDbPtr);
 }
 
 template<class _ItemType>
@@ -221,7 +222,7 @@ void DbManager<_ItemType>::Search_or(Tree<_ItemType>*& newDbPtr)
 template<class _ItemType>
 void DbManager<_ItemType>::Search_not(Tree<_ItemType>*& newDbPtr)
 {
-	if ((key != NULL) {
+	if (key != "\0") {
 		// 초기 데이터베이스에서 key값이 들어간 문자열을 찾아낸 후
 		string getString;
 		bool finished = false;
@@ -232,11 +233,9 @@ void DbManager<_ItemType>::Search_not(Tree<_ItemType>*& newDbPtr)
 				newDbPtr->InsertItem(getString);
 			}
 		}
-
 		Tree<_ItemType> tempDb = (*allDbPtr);
 		tempDb.Extract(*newDbPtr);		// 전체 데이터베이스에서 'key값으로 검색된 위 새 임시Db'(*newDbPtr)를 제외한다.
 		(*newDbPtr) = tempDb;		// 그리고 다시 newDb(*newDbPtr)에 그 결과Db(tempDb)를 넣어준다.
-
 	}
 	else {		// key == NULL
 		Tree<_ItemType> tempDb = (*allDbPtr);
@@ -249,25 +248,17 @@ void DbManager<_ItemType>::Search_not(Tree<_ItemType>*& newDbPtr)
 template<class _ItemType>
 void DbManager<_ItemType>::Search_and_not(Tree<_ItemType>*& newDbPtr)
 {
-	string getString;
-	bool finished = false;
-	myCurrDbPtr->ResetTree(IN_ORDER);
-	while (!finished) {
-		myCurrDbPtr->GetNextItem(getString, IN_ORDER, finished);
-		if (getString.find(key) != string::npos) {
-			newDbPtr->InsertItem(getString);
-		}
-	}
+	Search_not(newDbPtr);
 
-	Tree<_ItemType> tempDb = (*myCurrDbPtr);
-	tempDb.Extract(*newDbPtr);
-	(*newDbPtr) = tempDb;
+	(*newDbPtr) = (*myCurrDbPtr) * (*newDbPtr);		//*myCurrDbPtr와 *newDbPtr는 원본보존됨.
 }
 
 template<class _ItemType>
 void DbManager<_ItemType>::Search_or_not(Tree<_ItemType>*& newDbPtr)
 {
+	Search_not(newDbPtr);
 
+	(*newDbPtr) = (*myCurrDbPtr) + (*newDbPtr);		//*myCurrDbPtr와 *newDbPtr는 원본보존됨.
 }
 
 
