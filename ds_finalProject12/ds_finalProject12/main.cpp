@@ -99,10 +99,10 @@ int main()
 					break;
 				}
 			}
-			if (DbM.oper != "not") {
-				cout << "검색 키워드를 입력하세요: ";
-				getline(cin, DbM.key);
-			}
+			
+			cout << "검색 키워드를 입력하세요: ";
+			getline(cin, DbM.key);
+			
 			DbM.Search_in_myCurrDb();
 
 			cout << endl;

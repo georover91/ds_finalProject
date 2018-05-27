@@ -93,6 +93,12 @@ void CopyTree(TreeNode<ItemType>*& copy, const TreeNode<ItemType>* originalTree)
 
 // Merge & Extract //////////////////////////////
 template<class _ItemType>
+Tree<_ItemType> Tree<_ItemType>::operator+(Tree<_ItemType>& originalTree)
+{
+
+}
+
+template<class _ItemType>
 void Tree<_ItemType>::Merge(Tree<_ItemType>& operand)
 {
 	_ItemType tempItem;
@@ -103,6 +109,12 @@ void Tree<_ItemType>::Merge(Tree<_ItemType>& operand)
 		operand.GetNextItem(tempItem, IN_ORDER, finished);
 		InsertItem(tempItem);
 	}
+}
+
+template<class _ItemType>
+Tree<_ItemType> Tree<_ItemType>::operator-(Tree<_ItemType>& originalTree)
+{
+
 }
 
 template<class _ItemType>
@@ -121,6 +133,12 @@ void Tree<_ItemType>::Extract(Tree<_ItemType>& operand)
 		}
 		else {}
 	}
+}
+
+template<class _ItemType>
+void Tree<_ItemType>::operator*(Tree<_ItemType>& originalTree)
+{
+
 }
 ///////////////////////////////////////////////////////////////////////////
 

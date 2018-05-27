@@ -21,8 +21,11 @@ public:
 	~Tree();	// destructor
 	Tree(const Tree<_ItemType>& originalTree);
 	void operator=(const Tree<_ItemType>& originalTree);	// copy constructor
+	void operator+(Tree<_ItemType>& originalTree);
 	void Merge(Tree<_ItemType>& operand);
+	void operator-(Tree<_ItemType>& originalTree);
 	void Extract(Tree<_ItemType>& operand);
+	void operator*(Tree<_ItemType>& originalTree);
 	void MakeEmpty();
 	bool IsEmpty() const;
 	bool IsFull() const;
