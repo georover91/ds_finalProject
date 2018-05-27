@@ -99,7 +99,7 @@ void Tree<_ItemType>::operator=(const Tree<_ItemType>& originalTree)
 */
 
 template<class _ItemType>
-void Tree<_ItemType>::operator=(Tree<_ItemType> originalTree)
+void Tree<_ItemType>::operator=(const Tree<_ItemType>& originalTree)
 // Calls recursive function CopyTree to copy originalTree 
 // into root.
 {
@@ -216,25 +216,26 @@ Tree<_ItemType> Tree<_ItemType>::operator*(Tree<_ItemType>& operand)
 	bool finished1 = false;
 	bool finished2 = false;
 
-	MakeInQueEmpty();
+	//MakeInQueEmpty();
 	ResetTree(IN_ORDER);
 	while (!finished1) {
 		GetNextItem(getString1, IN_ORDER, finished1);
 
-		operand.MakeInQueEmpty();
+		//operand.MakeInQueEmpty();
 		operand.ResetTree(IN_ORDER);
 		while (!finished2) {
 			operand.GetNextItem(getString2, IN_ORDER, finished2);
 
 			if (getString1 == getString2) {
 				tempTreePtr.InsertItem(getString1);
-				break;		// 이 Tree class에서는 같은 key값을 중복삽입할 수 없으므로, 동일한 것을 찾으면 다시 동일한 것을 또 찾는데 시간 쏟을 것이 아니라, 바로 다음 원소를 찾도록 한다.
+				//break;		// 이 Tree class에서는 같은 key값을 중복삽입할 수 없으므로, 동일한 것을 찾으면 다시 동일한 것을 또 찾는데 시간 쏟을 것이 아니라, 바로 다음 원소를 찾도록 한다.
 			}
 		}
 	}
 
 	//MakeInQueEmpty();
 	//operand.MakeInQueEmpty();
+
 	tempTreePtr.Print();
 	return tempTreePtr;
 }

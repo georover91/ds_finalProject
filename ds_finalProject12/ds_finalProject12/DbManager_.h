@@ -187,6 +187,7 @@ void DbManager<_ItemType>::Search_in_myCurrDb()
 template<class _ItemType>
 void DbManager<_ItemType>::Search_and(Tree<_ItemType>*& newDbPtr)
 {
+
 	string getString;
 	bool finished = false;
 	myCurrDbPtr->ResetTree(IN_ORDER);
@@ -197,7 +198,7 @@ void DbManager<_ItemType>::Search_and(Tree<_ItemType>*& newDbPtr)
 		}
 	}
 	
-	(*newDbPtr) = (*myCurrDbPtr) *(*newDbPtr);
+	(*newDbPtr) = ((*myCurrDbPtr) * (*newDbPtr));
 }
 
 template<class _ItemType>
@@ -214,8 +215,7 @@ void DbManager<_ItemType>::Search_or(Tree<_ItemType>*& newDbPtr)
 	}
 
 	Tree<_ItemType> tempDb = (*myCurrDbPtr);
-	tempDb.Merge(*newDbPtr);
-	(*newDbPtr) = tempDb;
+	(*newDbPtr) = tempDb + (*newDbPtr);
 	
 }
 
