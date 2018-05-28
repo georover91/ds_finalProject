@@ -94,12 +94,41 @@ void DoubleLL<_ItemType>::GoToBeforePos()
 template <class _ItemType>
 void DoubleLL<_ItemType>::GoToNextPos()
 {
+	DoubleLLNode<_ItemType>* tempPtr = currentPos;
+
 	currentPos = currentPos->bottomPtr;
 
 	if (currentPos == trailerPtr) { //원소가 없으면 currentPos = headerptr;로 다시 초기화.
 		currentPos = headerPtr;		// 이경우는, 다음의 코딩과 경우가 같다. currentPos = trailerPtr->topPtr;
 	}
+
+	//if (currentPos == trailerPtr) {
+	//	currentPos = tempPtr;		
+	//}
 }
+
+template <class _ItemType>
+bool DoubleLL<_ItemType>::IsCurrPosHeader()
+{
+	if (currentPos == headerPtr) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+template <class _ItemType>
+bool DoubleLL<_ItemType>::IsCurrPosTrailer()
+{
+	if (currentPos == trailerPtr) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 
 template <class _ItemType>
 bool DoubleLL<_ItemType>::IsBeforePosHeader()
@@ -127,6 +156,12 @@ template <class _ItemType>
 DoubleLLNode<_ItemType>*  DoubleLL<_ItemType>::WhatIsCurrentPos()
 {
 	return currentPos;
+}
+
+template <class _ItemType>
+_ItemType  DoubleLL<_ItemType>::WhatIsCurrentInfo()
+{
+	return (currentPos->info);
 }
 
 template <class _ItemType>

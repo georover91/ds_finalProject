@@ -21,9 +21,12 @@ public:
 	void GoToBottom();
 	void GoToBeforePos();
 	void GoToNextPos();
+	bool IsCurrPosHeader();
+	bool IsCurrPosTrailer();
 	bool IsBeforePosHeader();
 	bool IsNextPosTrailer();
 	DoubleLLNode<_ItemType>* WhatIsCurrentPos();
+	_ItemType WhatIsCurrentInfo();
 	void ChangeHeaderToNext();
 	void InsertLine(_ItemType newline);
 	void DeleteLine();		//currentPos의 Line을 삭제한다.

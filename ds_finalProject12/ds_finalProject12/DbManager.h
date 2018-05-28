@@ -23,12 +23,14 @@ public:
 	void Search_not(Tree<_ItemType>*& newDbPtr);
 	void Search_and_not(Tree<_ItemType>*& newDbPtr);
 	void Search_or_not(Tree<_ItemType>*& newDbPtr);
+	void allData();
 	//void Insert_command_to_backStack();
 	//void Insert_tree_to_DoubleLL(Tree<_ItemType>* itemPtr);
 	//void Insert_oper_to_DoubleLL(_ItemType key);
 	//void Insert_key_to_DoubleLL(_ItemType itemPtr);
 	void Print_myCurrDb();
 	void Print_searchPath();
+	void Print_Nth_Search();
 	void Print_to_myWriting();
 	void Print_to_file();
 

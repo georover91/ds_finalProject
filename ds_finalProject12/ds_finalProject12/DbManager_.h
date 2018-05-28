@@ -198,13 +198,22 @@ void DbManager<_ItemType>::Search_or_not(Tree<_ItemType>*& newDbPtr)
 
 
 
+// allData ///////////////////////////////////////////
+template<class _ItemType>
+void DbManager<_ItemType>::allData()
+{
+	myDbBackStack.Push(allDbPtr);
+	myDbForwardStack.MakeEmpty();
+	myCurrDbPtr = allDbPtr;
 
+	oper = "all data";
+	operDoubleLL.Insert_with_Deleting_nextPos(oper);
+	key = "\0";
+	keyDoubleLL.Insert_with_Deleting_nextPos(key);
 
-
-
-
-
-
+	searchNum++;
+}
+///////////////////////////////////////////////////
 
 
 
@@ -277,19 +286,34 @@ void DbManager<_ItemType>::Print_searchPath()
 	DoubleLLNode<_ItemType>* tempOperPtr = NULL;
 	DoubleLLNode<_ItemType>* tempKeyPtr = NULL;
 
-	do {
-		if ((!operDoubleLL.IsCurrHeader()) && (!keyDoubleLL.IsEmpty())) {
+	if ((!operDoubleLL.IsCurrPosHeader()) && (!keyDoubleLL.IsCurrPosHeader())) {
+		do {
 			cout << "->";
 			cout << " ";
 			operDoubleLL.Print_NextOne(tempOperPtr);
+			//cout << tempOperPtr->topPtr->info << endl;		//이 코드 살리면, 이 코드 때문에 오류난다. headerPtr이 DoubleLL class 의 private맴버변수라면, tempOperPtr에 headerPtr값을 넣더라도 tempOperPtr를 조작해서는 DoubleLL class의 private맴버변수에 접근할 수 없다.
 			cout << " ";
 			cout << "\"";
 			keyDoubleLL.Print_NextOne(tempKeyPtr);
 			cout << "\"";
 			cout << " ";
-		}
-	} while ((tempOperPtr != NULL) && (tempKeyPtr != NULL));
-	
+		} while ((tempOperPtr != NULL) && (tempKeyPtr != NULL));
+		
+		cout << endl;
+	}
+}
+
+template<class _ItemType>
+void DbManager<_ItemType>::Print_Nth_Search()
+{
+	cout << endl;
+	cout << "<<<" << searchNum << "번째 검색." << ">>>" << "============================" << endl;
+	cout << "---검색 연산자 및 검색어 히스토리------------" << endl;
+	Print_searchPath();
+	cout << "---------------------------------------------" << endl;
+	Print_myCurrDb();
+	cout << "=============================================" << endl;
+	cout << endl;
 }
 
 template<class _ItemType>
