@@ -39,6 +39,35 @@ DoubleLL<_ItemType>::DoubleLL()
 
 
 
+// IsEmpty & IsFull //////////////////////////////////////////////////
+template<class _ItemType>
+bool DoubleLL<_ItemType>::IsEmpty() const
+// Returns true if there are no elements on the queue; false otherwise.
+{
+	return (headerPtr->bottomPtr == trailerPtr);
+}
+
+template<class _ItemType>
+bool DoubleLL<_ItemType>::IsFull() const
+// Returns true if there is no room for another ItemType 
+//  on the free store; false otherwise.
+{
+	DoubleLLNode<_ItemType>* location;
+	try
+	{
+		location = new DoubleLLNode<_ItemType>;
+		delete location;
+		return false;
+	}
+	catch (std::bad_alloc)
+	{
+		return true;
+	}
+}
+////////////////////////
+
+
+
 // GoTo~ & ChangeCurrentPos & IsCurrentPos~ & WhatIs~ //////////////////////////////////////////////////////////
 template <class _ItemType>
 void DoubleLL<_ItemType>::GoToTop()
@@ -225,10 +254,30 @@ void DoubleLL<_ItemType>::Print()
 		currentPos = currentPos->bottomPtr;
 	}
 
-	if ((currentPos == trailerPtr)) { //원소가 없으면 currentPos = headerptr;로 다시 초기화.
+	//if ((currentPos == trailerPtr)) { //원소가 없으면 currentPos = headerptr;로 다시 초기화.
 		currentPos = headerPtr;
-	}
+	//}
 
 	currentPos = temp;
+}
+
+template <class _ItemType>
+void DoubleLL<_ItemType>::Print_NextOne(DoubleLLNode<_ItemType>*& tempPtr)
+//처음위치부터 프린트 하거나, currentPos 위치의 다음 위치부터 프린트함.
+{
+	//if (currentPos != headerPtr) {
+		if (tempPtr == NULL) {
+			tempPtr = headerPtr;
+			tempPtr = tempPtr->bottomPtr;
+		}
+
+		cout << tempPtr->info;	// << " ";
+		tempPtr = tempPtr->bottomPtr;
+
+		if (tempPtr == currentPos->bottomPtr) {		// (tempPtr == currentPos->bottomPtr) || (tempPtr == trailer)
+			tempPtr = NULL;
+		}
+	//}
+	
 }
 ////////////////////////////////////////////////////////////////////////////

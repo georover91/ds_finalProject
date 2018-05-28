@@ -28,6 +28,7 @@ public:
 	//void Insert_oper_to_DoubleLL(_ItemType key);
 	//void Insert_key_to_DoubleLL(_ItemType itemPtr);
 	void Print_myCurrDb();
+	void Print_searchPath();
 	void Print_to_myWriting();
 	void Print_to_file();
 

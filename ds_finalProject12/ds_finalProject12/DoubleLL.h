@@ -15,6 +15,8 @@ public:
 	DoubleLL();
 	//DoubleLL(DoubleLL& copiedDoubleLL);
 	//~DoubleLL();
+	bool IsEmpty() const;
+	bool IsFull() const;
 	void GoToTop();
 	void GoToBottom();
 	void GoToBeforePos();
@@ -29,6 +31,7 @@ public:
 	void FindItem(_ItemType item, bool& found);
 	_ItemType GetItem();
 	void Print();
+	void Print_NextOne(DoubleLLNode<_ItemType>*& tempPtr);
 
 private:
 	DoubleLLNode<_ItemType>* headerPtr;

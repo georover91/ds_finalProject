@@ -66,16 +66,26 @@ int main()
 			DbM.goBackward();
 
 			cout << endl;
-			cout << "<<<" << DbM.searchNum << "번째 검색." << ">>>" << endl;
+			cout << "<<<" << DbM.searchNum << "번째 검색." << ">>>" << "============================" << endl;
+			cout << "---검색 연산자 및 검색어 히스토리------------" << endl;
+			DbM.Print_searchPath();
+			cout << endl;
+			cout << "---------------------------------------------" << endl;
 			DbM.Print_myCurrDb();
+			cout << "=============================================" << endl;
 			cout << endl;
 		}
 		else if (DbM.command == "go forward") {
 			DbM.goForward();
 
 			cout << endl;
-			cout << "<<<" << DbM.searchNum << "번째 검색." << ">>>" << endl;
+			cout << "<<<" << DbM.searchNum << "번째 검색." << ">>>" << "============================" << endl;
+			cout << "---검색 연산자 및 검색어 히스토리------------" << endl;
+			DbM.Print_searchPath();
+			cout << endl;
+			cout << "---------------------------------------------" << endl;
 			DbM.Print_myCurrDb();
+			cout << "=============================================" << endl;
 			cout << endl;
 		}
 		else if (DbM.command == "search") {
@@ -93,8 +103,13 @@ int main()
 			DbM.Search();
 
 			cout << endl;
-			cout << "<<<" << DbM.searchNum << "번째 검색." << ">>>" << endl;
+			cout << "<<<" << DbM.searchNum << "번째 검색." << ">>>" << "============================" << endl;
+			cout << "---검색 연산자 및 검색어 히스토리------------" << endl;
+			DbM.Print_searchPath();
+			cout << endl;
+			cout << "---------------------------------------------" << endl;
 			DbM.Print_myCurrDb();
+			cout << "=============================================" << endl;
 			cout << endl;
 		}
 		else if (DbM.command == "all data") {

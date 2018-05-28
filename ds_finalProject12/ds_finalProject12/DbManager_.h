@@ -272,6 +272,27 @@ void DbManager<_ItemType>::Print_myCurrDb()
 }
 
 template<class _ItemType>
+void DbManager<_ItemType>::Print_searchPath()
+{
+	DoubleLLNode<_ItemType>* tempOperPtr = NULL;
+	DoubleLLNode<_ItemType>* tempKeyPtr = NULL;
+
+	do {
+		if ((!operDoubleLL.IsCurrHeader()) && (!keyDoubleLL.IsEmpty())) {
+			cout << "->";
+			cout << " ";
+			operDoubleLL.Print_NextOne(tempOperPtr);
+			cout << " ";
+			cout << "\"";
+			keyDoubleLL.Print_NextOne(tempKeyPtr);
+			cout << "\"";
+			cout << " ";
+		}
+	} while ((tempOperPtr != NULL) && (tempKeyPtr != NULL));
+	
+}
+
+template<class _ItemType>
 void DbManager<_ItemType>::Print_to_myWriting()
 {
 
