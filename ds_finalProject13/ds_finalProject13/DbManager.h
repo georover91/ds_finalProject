@@ -15,8 +15,9 @@ public:
 	DbManager(Tree<_ItemType> T1);
 	DbManager(ifstream& inFile);
 	//~DbManager();
-	void Initailize();
-	void Initailize(ifstream& inFile);
+	void MakeEmpty();
+	void Initialize();
+	void Initialize(ifstream& inFile);
 	void goBackward();
 	void goForward();
 	void Search();	//Tree<_ItemType>* myCurrDbPtr 는 맴버변수이므로, 맴버함수의 인수로 추가할 필요 없음.

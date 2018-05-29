@@ -4,28 +4,16 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "DbManager_.h"
 
-
+void OpenFile_and_Initialize(DbManager<ItemType>& DbM);
 
 int main()
 {
+	DbManager<ItemType> DbM;
+
 	//입력파일로 검색기의 초기 데이터베이스 구성.
-	string inputFileName;
-	cout << "검색기의 초기 데이터베이스를 구성할 입력파일의 이름을 입력하세요: ";
-	getline(cin, inputFileName);
-	cout << endl;
-
-	ifstream inFile(inputFileName.c_str());	//초기 데이터 베이스는 파일(초기DB구성파일) 하나에서 읽어와 구성.
-	if (!inFile.is_open()) {
-		cout << "데이터 베이스를 구성할 파일을 열 수 없습니다." << endl;
-		return 0;
-	}
-
-	DbManager<ItemType> DbM(inFile);
+	OpenFile_and_Initialize(DbM);
 	DbM.Print_Nth_Search();
-	inFile.close();
 
-
-	
 	// 본격적으로 string DB 검색 프로그램을 실행.
 	DbM.Input_command();
 
@@ -48,25 +36,70 @@ int main()
 				}
 			}
 			
-			if (DbM.oper == "all data") {
-				DbM.allData();
-				DbM.Print_Nth_Search();
-			}
-			else {
+			if (DbM.oper != "all data") {
 				cout << "검색 키워드를 입력하세요: ";
 				getline(cin, DbM.key);
 
 				DbM.Search();
 				DbM.Print_Nth_Search();
 			}
+			else {
+				DbM.allData();
+				DbM.Print_Nth_Search();
+			}
 		
+		}
+		else if (DbM.command == "and") {
+			DbM.oper = "and";
+
+			cout << "검색 키워드를 입력하세요: ";
+			getline(cin, DbM.key);
+
+			DbM.Search();
+			DbM.Print_Nth_Search();
+		}
+		else if (DbM.command == "or") {
+			DbM.oper = "or";
+
+			cout << "검색 키워드를 입력하세요: ";
+			getline(cin, DbM.key);
+
+			DbM.Search();
+			DbM.Print_Nth_Search();
+		}
+		else if (DbM.command == "not") {
+			DbM.oper = "not";
+
+			cout << "검색 키워드를 입력하세요: ";
+			getline(cin, DbM.key);
+
+			DbM.Search();
+			DbM.Print_Nth_Search();
+		}
+		else if (DbM.command == "and not") {
+			DbM.oper = "and not";
+
+			cout << "검색 키워드를 입력하세요: ";
+			getline(cin, DbM.key);
+
+			DbM.Search();
+			DbM.Print_Nth_Search();
+		}
+		else if (DbM.command == "or not") {
+			DbM.oper = "or not";
+
+			cout << "검색 키워드를 입력하세요: ";
+			getline(cin, DbM.key);
+
+			DbM.Search();
+			DbM.Print_Nth_Search();
 		}
 		else if (DbM.command == "all data") {
 			DbM.allData();
 			DbM.Print_Nth_Search();
 		}
 		else if (DbM.command == "initialize") {
-			DbM.Initailize(inFile);
+			OpenFile_and_Initialize(DbM);
 			DbM.Print_Nth_Search();
 		}
 		else if (DbM.command == "select") {
@@ -79,9 +112,27 @@ int main()
 		DbM.Input_command();
 	};
 
-	inFile.close();
 	
-
-
+	
 	return 0;
+}
+
+
+
+void OpenFile_and_Initialize(DbManager<ItemType>& DbM)
+{
+	//입력파일로 검색기의 초기 데이터베이스 구성.
+	string inputFileName;
+	cout << "검색기의 초기 데이터베이스를 구성할 입력파일의 이름을 입력하세요: ";
+	getline(cin, inputFileName);
+	cout << endl;
+
+	ifstream inFile(inputFileName.c_str());	//초기 데이터 베이스는 파일(초기DB구성파일) 하나에서 읽어와 구성.
+	if (!inFile.is_open()) {
+		cout << "데이터 베이스를 구성할 파일을 열 수 없습니다." << endl;
+		exit(1);
+	}
+
+	DbM.Initialize(inFile);	//
+	inFile.close();
 }

@@ -83,24 +83,46 @@ DbManager<_ItemType>::DbManager(ifstream& inFile)
 //{
 //
 //}
+
+template<class _ItemType>
+void DbManager<_ItemType>::MakeEmpty()
+{
+	//(*allDbPtr).MakeEmpty();
+	//myCurrDbPtr = allDbPtr;
+
+	Tree<_ItemType>* tempPtr;
+
+	//while (!myDbBackStack.IsEmpty()) {
+	//	myDbBackStack.Top(tempPtr);
+	//	myDbBackStack.Pop();
+	//	delete tempPtr;
+	//}
+	//myDbBackStack.MakeEmpty();
+
+	//while (!myDbBackStack.IsEmpty()) {
+	//	myDbBackStack.Top(tempPtr);
+	//	myDbBackStack.Pop();
+	//	delete tempPtr;
+	//}
+	//myDbForwardStack.MakeEmpty();
+	
+	operKeyDoubleLL.MakeEmpty();
+}
 ///////////////////////////////////////////////////////////////////////////////
 
 
 
 // initailize ////////////////////////////
 template<class _ItemType>
-void DbManager<_ItemType>::Initailize()
+void DbManager<_ItemType>::Initialize()
 {
-	delete allDbPtr;
+	MakeEmpty();
+
 	allDbPtr = new Tree<_ItemType>;	//allDb 생성.
-
-	myDbBackStack.MakeEmpty();
+	// allDb Tree 원소 구성을 생략.
 	myDbBackStack.Push(allDbPtr);
-	myDbForwardStack.MakeEmpty();
-
 	myCurrDbPtr = allDbPtr;
 
-	operKeyDoubleLL.MakeEmpty();
 	oper = "all data";
 	key = "\0";
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
@@ -111,16 +133,16 @@ void DbManager<_ItemType>::Initailize()
 }
 
 template<class _ItemType>
-void  DbManager<_ItemType>::Initailize(ifstream& inFile)
+void  DbManager<_ItemType>::Initialize(ifstream& inFile)
 {
-	delete allDbPtr;
-	allDbPtr = new Tree<_ItemType>;	//allDb 생성.
+	MakeEmpty();
 
+
+	//Tree<_ItemType>* //allDbPtr = new Tree<_ItemType>;	//allDb 생성.
+
+	// allDb의 원소 구성하기.
 	string command_data;
-	//int numCommands;
-	int numData;
-
-	numData = 0;
+	int numData = 0;
 	getline(inFile, command_data);	// '초기DB구성파일'의 한 줄을 명령으로 받아옴.
 	if (command_data == "InsertStrings") {
 		getline(inFile, command_data);
@@ -134,16 +156,13 @@ void  DbManager<_ItemType>::Initailize(ifstream& inFile)
 	else {
 		cout << "Command Error. or Data Error." << endl;
 	}
+	cout << endl;
+	cout << endl;
 
-	
-
-	myDbBackStack.MakeEmpty();
 	myDbBackStack.Push(allDbPtr);
-	myDbForwardStack.MakeEmpty();
+	//myCurrDbPtr = allDbPtr;
 
-	myCurrDbPtr = allDbPtr;
 
-	operKeyDoubleLL.MakeEmpty();
 	oper = "all data";
 	key = "\0";
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
@@ -151,6 +170,10 @@ void  DbManager<_ItemType>::Initailize(ifstream& inFile)
 
 	searchNum = 0;
 	cumNum = 0;
+
+	command = "\0";
+	oper = "\0";
+	key = "\0";
 }
 ///////////////////////////////////////
 
