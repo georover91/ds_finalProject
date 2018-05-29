@@ -8,36 +8,26 @@
 
 int main()
 {
-	//프로젝트 본문 시작.
-	ifstream inFile("in.txt");	//초기 데이터 베이스는 파일(초기DB구성파일) 하나에서 읽어와 구성.
+	//입력파일로 검색기의 초기 데이터베이스 구성.
+	string inputFileName;
+	cout << "검색기의 초기 데이터베이스를 구성할 입력파일의 이름을 입력하세요: ";
+	getline(cin, inputFileName);
+	cout << endl;
+
+	ifstream inFile(inputFileName.c_str());	//초기 데이터 베이스는 파일(초기DB구성파일) 하나에서 읽어와 구성.
 	if (!inFile.is_open()) {
 		cout << "데이터 베이스를 구성할 파일을 열 수 없습니다." << endl;
 		return 0;
 	}
-	//else {
-		DbManager<ItemType> DbM(inFile);
-		DbM.Print_Nth_Search();
-		inFile.close();
-	//}
-	
-	ofstream outFile("out.txt");		// 내가 찾은 문자열을 저장하는 텍스트 파일.
-	ofstream garbage("garbage.txt");	//그냥 cout으로만 출력하고 싶을 때, ofstream으로 출력되는 값을 한곳에 모아 출력하여, 버릴때 쓰는 출력 파일스트림.
 
-	//cout << endl;
-	//cout << "<<<" << "초기 데이터 베이스(0번째 검색)." << ">>>" << endl;
-	//T1.Print(garbage);
-	//cout << endl;
+	DbManager<ItemType> DbM(inFile);
+	DbM.Print_Nth_Search();
+	inFile.close();
 
 
 	
 	// 본격적으로 string DB 검색 프로그램을 실행.
-	cout << endl;
-	cout << endl;
-	DbM.cumNum++;
-	cout << "<<<" << DbM.cumNum << "번째 명령." << ">>>" << endl;
-	cout << "프로그램 실행명령을 입력하세요: ";
-	getline(cin, DbM.command);
-	// (command의 history를 저장할 필요없다. 따라서 command를 저장할 backStack, forwardStack 또는 DoubleLL을 만들 필요는 없다.)
+	DbM.Input_command();
 
 	while (DbM.command != "Quit")
 	{
@@ -76,7 +66,8 @@ int main()
 			DbM.Print_Nth_Search();
 		}
 		else if (DbM.command == "initialize") {
-			DbM.Initailize();
+			DbM.Initailize(inFile);
+			DbM.Print_Nth_Search();
 		}
 		else if (DbM.command == "select") {
 
@@ -85,14 +76,11 @@ int main()
 
 		}
 
-		cout << endl;
-		cout << endl;
-		DbM.cumNum++;
-		cout << "<<<" << DbM.cumNum << "번째 명령." << ">>>" << endl;
-		cout << "프로그램 실행명령을 입력하세요: ";
-		getline(cin, DbM.command);
+		DbM.Input_command();
 	};
 
+	inFile.close();
+	
 
 
 	return 0;

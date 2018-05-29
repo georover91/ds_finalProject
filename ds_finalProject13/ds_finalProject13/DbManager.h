@@ -31,6 +31,7 @@ public:
 	//void Insert_tree_to_DoubleLL(Tree<_ItemType>* itemPtr);
 	//void Insert_oper_to_DoubleLL(_ItemType key);
 	//void Insert_key_to_DoubleLL(_ItemType itemPtr);
+	void Input_command();
 	void Print_myCurrDb();
 	void Print_searchPath();
 	void Print_Nth_Search();

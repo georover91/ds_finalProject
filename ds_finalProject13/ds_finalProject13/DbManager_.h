@@ -61,7 +61,8 @@ DbManager<_ItemType>::DbManager(ifstream& inFile)
 	else {
 		cout << "Command Error. or Data Error." << endl;
 	}
-
+	cout << endl;
+	cout << endl;
 
 
 	myDbBackStack.Push(allDbPtr);
@@ -159,14 +160,17 @@ void  DbManager<_ItemType>::Initailize(ifstream& inFile)
 template<class _ItemType>
 void DbManager<_ItemType>::goBackward()
 {
-	if (myCurrDbPtr == allDbPtr) {		//현재 myCurrDb가 allDb이면,
+	//myCurrDbPtr////
+	myDbBackStack.Pop();
+
+	if (myDbBackStack.IsEmpty()) {		//현재 myCurrDb가 allDb이면,
 		cout << "더이상 뒤로 되돌릴 Data Base History가 없습니다." << endl;
+		myDbBackStack.Push(allDbPtr);
 		return;	//아무 실행 안하고 함수 종료.
 	}
 	else {
 		//myCurrDbPtr////
 		myDbForwardStack.Push(myCurrDbPtr);		// go forward 명령어 실행에 대비해, myDbForwardStack에 현재 myCurrDbPtr값 저장.
-		myDbBackStack.Pop();
 		myDbBackStack.Top(myCurrDbPtr);		// myCurrDbPtr 값이 back스택에도 가장 위에 남아있도록 항상 실시간상태를 유지.
 
 		//oper & key////
@@ -389,6 +393,22 @@ void DbManager<_ItemType>::Insert_key_to_DoubleLL(_ItemType key)
 
 
 
+// Input_command //////////////////////////////////////////////////////////
+template<class _ItemType>
+void DbManager<_ItemType>::Input_command()
+{
+	cout << endl;
+	cout << endl;
+	cumNum++;
+	cout << "<<<" << cumNum << "번째 명령" << ">>>" << endl;
+	cout << "프로그램 실행명령을 입력하세요: ";
+	getline(cin, command);
+	// (command의 history를 저장할 필요없다. 따라서 command를 저장할 backStack, forwardStack 또는 DoubleLL을 만들 필요는 없다.)
+}
+/////////////////////////////////////////////////////////////////////////
+
+
+
 // Print ////////////////////////////////////////////////////////////////////
 template<class _ItemType>
 void DbManager<_ItemType>::Print_myCurrDb()
@@ -407,10 +427,10 @@ void DbManager<_ItemType>::Print_Nth_Search()
 {
 	cout << endl;
 	if (searchNum == 0) {
-		cout << "<<<" << "초기 데이터베이스." << ">>>" << "=====================" << endl;
+		cout << "<<<" << "초기 데이터베이스" << ">>>" << "=====================" << endl;
 	}
 	else {
-		cout << "<<<" << searchNum << "번째 검색결과." << ">>>" << "============================" << endl;
+		cout << "<<<" << searchNum << "번째 검색결과" << ">>>" << "============================" << endl;
 	}
 	cout << "---검색 연산자 및 검색어 히스토리------------" << endl;
 	Print_searchPath();
