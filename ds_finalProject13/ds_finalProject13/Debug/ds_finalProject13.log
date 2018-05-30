@@ -1,3 +1,2 @@
 ﻿  main.cpp
-d:\github\ds_finalproject\ds_finalproject13\ds_finalproject13\treetype_.h(104): error C2039: '=': 'Tree<_ItemType>'의 멤버가 아닙니다.
-d:\github\ds_finalproject\ds_finalproject13\ds_finalproject13\treetype_.h(104): error C2447: '{': 함수 헤더가 없습니다. 이전 스타일의 형식 목록입니까?
+  ds_finalProject13.vcxproj -> D:\GitHub\ds_finalProject\ds_finalProject13\Debug\ds_finalProject13.exe

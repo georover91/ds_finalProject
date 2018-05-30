@@ -112,9 +112,50 @@ void Tree<_ItemType>::operator=(const Tree<_ItemType>& originalTree)
 }
 
 template<class _ItemType>
-bool Tree<_ItemType>::operator==(const Tree<_ItemType>& anoterhTree)
+bool Tree<_ItemType>::operator==(const Tree<_ItemType>& anotherTree)
 {
+	if (this == &anotherTree) {
+		return true;
+	}
+	else {
+		TreeNode<_ItemType>* anotherRoot = anotherTree.RootIs();
+		return compareTrees(root, anotherRoot);
+	}
+}
 
+template<class _ItemType>
+bool Tree<_ItemType>::operator!=(const Tree<_ItemType>& anotherTree)
+{
+	if (this == &anotherTree) {
+		return false;
+	}
+	else {
+		TreeNode<_ItemType>* anotherRoot = anotherTree.RootIs();
+		return (!compareTrees(root, anotherRoot));
+	}
+}
+
+template<class _ItemType>
+bool Tree<_ItemType>::compareTrees(TreeNode<_ItemType>* thisRoot, TreeNode<_ItemType>* anotherRoot)
+{
+	if ((thisRoot == NULL) || (anotherRoot == NULL)) {
+		return true;
+	}
+	// root->info != anotherRoot->info
+	// compareTrees(thisRoot->leftPtr, anotherRoot->leftPtr);
+	//compareTrees(thisRoot->rightPtr, anotherRoot->rightPtr);
+	if (thisRoot->info != anotherRoot->info) {
+		return false;
+	}
+	else if (compareTrees(thisRoot->leftPtr, anotherRoot->leftPtr) == false) {
+		return false;
+	}
+	else if (compareTrees(thisRoot->rightPtr, anotherRoot->rightPtr) == false) {
+		return false;
+	}
+	else {
+		return true;
+	}
 }
 //////////////////////////////////////////////////////
 

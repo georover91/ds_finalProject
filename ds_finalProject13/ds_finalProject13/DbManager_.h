@@ -330,14 +330,16 @@ void DbManager<_ItemType>::Search()
 		//}
 	//}
 
-	myDbBackStack.Push(newDbPtr);
-	myDbForwardStack.MakeEmpty();
-	myCurrDbPtr = newDbPtr;
+	if ((*myCurrDbPtr) != (*newDbPtr)) {
+		myDbBackStack.Push(newDbPtr);
+		myDbForwardStack.MakeEmpty();
+		myCurrDbPtr = newDbPtr;
 
-	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
-	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
+		operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
+		operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
 
-	searchNum++;
+		searchNum++;
+	}
 }
 
 template<class _ItemType>

@@ -8,6 +8,7 @@ void OpenFile_and_Initialize(DbManager<ItemType>& DbM);
 
 int main()
 {
+	
 	DbManager<ItemType> DbM;
 
 	//입력파일로 검색기의 초기 데이터베이스 구성.
@@ -111,8 +112,26 @@ int main()
 
 		DbM.Input_command();
 	};
-
 	
+
+
+
+	/*
+	// Tree 객체의 operator==, operator!= 오버로딩한 거 test하기 위한 code.
+	Tree<ItemType> T1;
+	T1.InsertItem("hello");
+	T1.InsertItem("world");
+	T1.InsertItem("z");
+
+	Tree<ItemType> T2;
+	T2.InsertItem("hello");
+	T2.InsertItem("world");
+	T2.InsertItem("z");
+
+	cout << (bool)(T1 != T2) << endl;
+	*/
+
+
 	
 	return 0;
 }

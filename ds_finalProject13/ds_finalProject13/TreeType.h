@@ -20,8 +20,10 @@ public:
 	Tree();		// constructor
 	~Tree();	// destructor
 	Tree(const Tree<_ItemType>& originalTree);
-	//void operator=(const Tree<_ItemType>& originalTree);	// copy constructor
-	bool operator==(const Tree<_ItemType>& anoterhTree);
+	void operator=(const Tree<_ItemType>& originalTree);	// copy constructor
+	bool operator==(const Tree<_ItemType>& anotherTree);
+	bool operator!=(const Tree<_ItemType>& anotherTree);
+	bool compareTrees(TreeNode<_ItemType>* thisRoot, TreeNode<_ItemType>* anotherRoot);
 	Tree<_ItemType> operator+(Tree<_ItemType>& operand);
 	void Merge(Tree<_ItemType>& operand);
 	Tree<_ItemType> operator-(Tree<_ItemType>& operand);
