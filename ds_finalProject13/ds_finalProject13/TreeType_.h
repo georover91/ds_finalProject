@@ -82,22 +82,6 @@ Tree<_ItemType>::Tree(const Tree<_ItemType>& originalTree)
 	CopyTree(root, originalTree.root);
 }
 
-/*
-template<class _ItemType>
-void Tree<_ItemType>::operator=(const Tree<_ItemType>& originalTree)
-// Calls recursive function CopyTree to copy originalTree 
-// into root.
-{
-	{
-		if (&originalTree == this)
-			return;             // Ignore assigning self to self
-		Destroy(root);      // Deallocate existing tree nodes
-		CopyTree(root, originalTree.RootIs());
-	}
-
-}
-*/
-
 void CopyTree(TreeNode<ItemType>*& copy, const TreeNode<ItemType>* originalTree)
 // Post: copy is the root of a tree that is a duplicate 
 //       of originalTree.
@@ -126,7 +110,13 @@ void Tree<_ItemType>::operator=(const Tree<_ItemType>& originalTree)
 	}
 
 }
-////
+
+template<class _ItemType>
+bool Tree<_ItemType>::operator==(const Tree<_ItemType>& anoterhTree)
+{
+
+}
+//////////////////////////////////////////////////////
 
 
 

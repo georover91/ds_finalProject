@@ -21,7 +21,7 @@ public:
 	~Tree();	// destructor
 	Tree(const Tree<_ItemType>& originalTree);
 	//void operator=(const Tree<_ItemType>& originalTree);	// copy constructor
-	void operator=(const Tree<_ItemType>& originalTree);
+	bool operator==(const Tree<_ItemType>& anoterhTree);
 	Tree<_ItemType> operator+(Tree<_ItemType>& operand);
 	void Merge(Tree<_ItemType>& operand);
 	Tree<_ItemType> operator-(Tree<_ItemType>& operand);

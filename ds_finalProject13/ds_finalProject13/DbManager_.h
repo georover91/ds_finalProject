@@ -6,141 +6,57 @@
 template<class _ItemType>
 DbManager<_ItemType>::DbManager()
 {
+	//allDbPtr 및 allDb 초기 구성.
 	allDbPtr = new Tree<_ItemType>;	//allDb 생성.
-	myDbBackStack.Push(allDbPtr);
+	/// allDb Tree 원소 구성 생략.
+
+
+	// myCurrDbPtr 초기 구성.
 	myCurrDbPtr = allDbPtr;
 
-	//operKeyDoubleLL.MakeEmpty();
+
+	// 검색결과 히스토리 초기 구성.
+	myDbBackStack.Push(allDbPtr);		// == myDbBackStack.Push(myCurrDbPtr);
+
+
+	// 검색연산자 및 검색어 히스토리 초기 구성.
 	oper = "all data";
 	key = "\0";
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
-
-	searchNum = 0;
-	cumNum = 0;
 }
 
 template<class _ItemType>
 DbManager<_ItemType>::DbManager(Tree<_ItemType> T1)
 {
+	//allDbPtr 및 allDb 초기 구성.
 	allDbPtr = new Tree<_ItemType>;	//allDb 생성.
+	/// allDb Tree 원소 구성.
 	(*allDbPtr) = T1;
-	myDbBackStack.Push(allDbPtr);
+
+
+	// myCurrDbPtr 초기 구성.
 	myCurrDbPtr = allDbPtr;
 
-	//operKeyDoubleLL.MakeEmpty();
+
+	// 검색결과 히스토리 초기 구성.
+	myDbBackStack.Push(allDbPtr);		// == myDbBackStack.Push(myCurrDbPtr);
+
+
+	// 검색연산자 및 검색어 히스토리 초기 구성.
 	oper = "all data";
 	key = "\0";
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
-
-	searchNum = 0;
-	cumNum = 0;
 }
 
 template<class _ItemType>
 DbManager<_ItemType>::DbManager(ifstream& inFile)
 {
+	//allDbPtr 및 allDb 초기 구성.
 	allDbPtr = new Tree<_ItemType>;	//allDb 생성.
-	
-	string command_data;
-	//int numCommands;
-	int numData;
 
-	numData = 0;
-	getline(inFile, command_data);	// '초기DB구성파일'의 한 줄을 명령으로 받아옴.
-	if (command_data == "InsertStrings") {
-		getline(inFile, command_data);
-		while (command_data != "Quit") {	// 입력파일의 입력문장들을 하나씩 게속 읽어들인다.
-			(*allDbPtr).InsertItem(command_data);
-			numData++;
-			cout << numData << "th data has been inputed: " << command_data << endl;
-			getline(inFile, command_data);
-		}
-	}
-	else {
-		cout << "Command Error. or Data Error." << endl;
-	}
-	cout << endl;
-	cout << endl;
-
-
-	myDbBackStack.Push(allDbPtr);
-	myCurrDbPtr = allDbPtr;
-
-	//operKeyDoubleLL.MakeEmpty();
-	oper = "all data";
-	key = "\0";
-	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
-	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
-
-	searchNum = 0;
-	cumNum = 0;
-}
-
-//template<class _ItemType>
-//DbManager<_ItemType>::~DbManager()
-//{
-//
-//}
-
-template<class _ItemType>
-void DbManager<_ItemType>::MakeEmpty()
-{
-	//(*allDbPtr).MakeEmpty();
-	//myCurrDbPtr = allDbPtr;
-
-	Tree<_ItemType>* tempPtr;
-
-	//while (!myDbBackStack.IsEmpty()) {
-	//	myDbBackStack.Top(tempPtr);
-	//	myDbBackStack.Pop();
-	//	delete tempPtr;
-	//}
-	//myDbBackStack.MakeEmpty();
-
-	//while (!myDbBackStack.IsEmpty()) {
-	//	myDbBackStack.Top(tempPtr);
-	//	myDbBackStack.Pop();
-	//	delete tempPtr;
-	//}
-	//myDbForwardStack.MakeEmpty();
-	
-	operKeyDoubleLL.MakeEmpty();
-}
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-// initailize ////////////////////////////
-template<class _ItemType>
-void DbManager<_ItemType>::Initialize()
-{
-	MakeEmpty();
-
-	allDbPtr = new Tree<_ItemType>;	//allDb 생성.
-	// allDb Tree 원소 구성을 생략.
-	myDbBackStack.Push(allDbPtr);
-	myCurrDbPtr = allDbPtr;
-
-	oper = "all data";
-	key = "\0";
-	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
-	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
-
-	searchNum = 0;
-	cumNum = 0;
-}
-
-template<class _ItemType>
-void  DbManager<_ItemType>::Initialize(ifstream& inFile)
-{
-	MakeEmpty();
-
-
-	//Tree<_ItemType>* //allDbPtr = new Tree<_ItemType>;	//allDb 생성.
-
-	// allDb의 원소 구성하기.
+	// 입력파일의 정보를 읽어, allDb의 원소 구성하기.
 	string command_data;
 	int numData = 0;
 	getline(inFile, command_data);	// '초기DB구성파일'의 한 줄을 명령으로 받아옴.
@@ -159,21 +75,170 @@ void  DbManager<_ItemType>::Initialize(ifstream& inFile)
 	cout << endl;
 	cout << endl;
 
-	myDbBackStack.Push(allDbPtr);
-	//myCurrDbPtr = allDbPtr;
+
+	// myCurrDbPtr 초기 구성.
+	myCurrDbPtr = allDbPtr;
 
 
+	// 검색결과 히스토리 초기 구성.
+	myDbBackStack.Push(allDbPtr);		// == myDbBackStack.Push(myCurrDbPtr);
+
+
+	// 검색연산자 및 검색어 히스토리 초기 구성.
 	oper = "all data";
 	key = "\0";
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
+}
 
+template<class _ItemType>
+DbManager<_ItemType>::~DbManager()
+{
+	MakeEmpty();
+}
+
+template<class _ItemType>
+void DbManager<_ItemType>::MakeEmpty()
+{
+	// allDb 및 allDbPtr 초기화.
+	Tree<_ItemType>* tempPtr;
+
+	while (!myDbBackStack.IsEmpty()) {
+		myDbBackStack.Top(tempPtr);
+		delete tempPtr;
+		myDbBackStack.Pop();
+	}
+	myDbBackStack.MakeEmpty();
+
+	while (!myDbForwardStack.IsEmpty()) {
+		myDbForwardStack.Top(tempPtr);
+		delete tempPtr;
+		myDbForwardStack.Pop();
+	}
+	myDbForwardStack.MakeEmpty();
+	//위 과정에서 delete allDbPtr; 포함됨.
+
+	allDbPtr = NULL;
+	
+	
+	// myCurrDbPtr 초기화.
+	myCurrDbPtr = NULL;
+	
+
+	// operKeyDoubleLL 히스토리 초기화.
+	operKeyDoubleLL.MakeEmpty();
+
+
+	// 검색횟수 및 명령횟수 초기화.
 	searchNum = 0;
 	cumNum = 0;
 
+
+	// 명령어, 검색 연산자, 검색어 저장하는 문자열 초기화.
 	command = "\0";
 	oper = "\0";
 	key = "\0";
+}
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+// initailize ////////////////////////////
+template<class _ItemType>
+void DbManager<_ItemType>::Initialize()
+{
+	MakeEmpty();
+
+
+	//allDbPtr 및 allDb 초기 구성.
+	allDbPtr = new Tree<_ItemType>;	//allDb 생성.
+	// allDb Tree 원소 구성을 생략.
+
+	
+	// myCurrDbPtr 초기 구성.
+	myCurrDbPtr = allDbPtr;
+
+
+	// 검색결과 히스토리 초기 구성.
+	myDbBackStack.Push(allDbPtr);		// == myDbBackStack.Push(myCurrDbPtr);
+
+
+	// 검색연산자 및 검색어 히스토리 초기 구성.
+	oper = "all data";
+	key = "\0";
+	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
+	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
+}
+
+template<class _ItemType>
+void DbManager<_ItemType>::Initialize(Tree<_ItemType> T1)
+{
+	MakeEmpty();
+
+
+	//allDbPtr 및 allDb 초기 구성.
+	allDbPtr = new Tree<_ItemType>;	//allDb 생성.
+	/// allDb Tree 원소 구성.
+	(*allDbPtr) = T1;
+
+
+	// myCurrDbPtr 초기 구성.
+	myCurrDbPtr = allDbPtr;
+
+
+	// 검색결과 히스토리 초기 구성.
+	myDbBackStack.Push(allDbPtr);		// == myDbBackStack.Push(myCurrDbPtr);
+
+
+	// 검색연산자 및 검색어 히스토리 초기 구성.
+	oper = "all data";
+	key = "\0";
+	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
+	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
+}
+
+template<class _ItemType>
+void  DbManager<_ItemType>::Initialize(ifstream& inFile)
+{
+	MakeEmpty();
+
+
+	//allDbPtr 및 allDb 초기 구성.
+	allDbPtr = new Tree<_ItemType>;	//allDb 생성.
+
+	// 입력파일의 정보를 읽어, allDb의 원소 구성하기.
+	string command_data;
+	int numData = 0;
+	getline(inFile, command_data);	// '초기DB구성파일'의 한 줄을 명령으로 받아옴.
+	if (command_data == "InsertStrings") {
+		getline(inFile, command_data);
+		while (command_data != "Quit") {	// 입력파일의 입력문장들을 하나씩 게속 읽어들인다.
+			(*allDbPtr).InsertItem(command_data);
+			numData++;
+			cout << numData << "th data has been inputed: " << command_data << endl;
+			getline(inFile, command_data);
+		}
+	}
+	else {
+		cout << "Command Error. or Data Error." << endl;
+	}
+	cout << endl;
+	cout << endl;
+
+
+	// myCurrDbPtr 초기 구성.
+	myCurrDbPtr = allDbPtr;
+
+
+	// 검색결과 히스토리 초기 구성.
+	myDbBackStack.Push(allDbPtr);		// == myDbBackStack.Push(myCurrDbPtr);
+	
+
+	// 검색연산자 및 검색어 히스토리 초기 구성.
+	oper = "all data";
+	key = "\0";
+	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
+	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
 }
 ///////////////////////////////////////
 
@@ -231,6 +296,8 @@ void DbManager<_ItemType>::goForward()
 // Search & Insert /////////////////////////////////////////////////////////
 template<class _ItemType>
 void DbManager<_ItemType>::Search()
+// 입력받은 검색 연산자와 검색어로 검색 수행.
+// 새로운 검색결과를 생성 및 출력.
 // 받은 oper과 key 값을 backStack에 저장까지 해줌.
 {
 	Tree<_ItemType>* newDbPtr;
@@ -450,16 +517,16 @@ void DbManager<_ItemType>::Print_Nth_Search()
 {
 	cout << endl;
 	if (searchNum == 0) {
-		cout << "<<<" << "초기 데이터베이스" << ">>>" << "=====================" << endl;
+		cout << "<<<" << "초기 데이터베이스" << ">>>" << "==============================================================" << endl;
 	}
 	else {
-		cout << "<<<" << searchNum << "번째 검색결과" << ">>>" << "============================" << endl;
+		cout << "<<<" << searchNum << "번째 검색결과" << ">>>" << "====================================================================" << endl;
 	}
-	cout << "---검색 연산자 및 검색어 히스토리------------" << endl;
+	cout << "---검색 연산자 및 검색어 히스토리----------------------------------------------------" << endl;
 	Print_searchPath();
-	cout << "---------------------------------------------" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
 	Print_myCurrDb();
-	cout << "=============================================" << endl;
+	cout << "=====================================================================================" << endl;
 	cout << endl;
 }
 

@@ -42,11 +42,12 @@ void DoubleLL<_ItemType>::MakeEmpty()
 	currentPos = headerPtr;
 	GoToNextPos();
 
-	while (currentPos != trailerPtr) {
+	while (currentPos != headerPtr) {
 		DeleteLine();
 		GoToNextPos();
 	}
 	
+	/*
 	delete headerPtr;
 	delete trailerPtr;
 
@@ -66,6 +67,7 @@ void DoubleLL<_ItemType>::MakeEmpty()
 	trailerPtr->bottomPtr = NULL;
 
 	currentPos = headerPtr;
+	*/
 }
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -247,7 +249,11 @@ void DoubleLL<_ItemType>::DeleteLine()
 template <class _ItemType>
 void DoubleLL<_ItemType>::Insert_with_Deleting_nextPos(_ItemType newline)
 {
-	if (IsNextPosTrailer()) {
+	DoubleLLNode<_ItemType>* tempPtr;
+	tempPtr = currentPos;
+	tempPtr = tempPtr->bottomPtr;
+
+	if (tempPtr == trailerPtr) {
 		InsertLine(newline);
 	}
 	else {		// 뒤로 갔다가 다시 검색해서 myCurrDb를 형성한 경우.

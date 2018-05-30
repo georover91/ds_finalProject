@@ -14,9 +14,10 @@ public:
 	DbManager();
 	DbManager(Tree<_ItemType> T1);
 	DbManager(ifstream& inFile);
-	//~DbManager();
+	~DbManager();
 	void MakeEmpty();
 	void Initialize();
+	void Initialize(Tree<_ItemType> T1);
 	void Initialize(ifstream& inFile);
 	void goBackward();
 	void goForward();

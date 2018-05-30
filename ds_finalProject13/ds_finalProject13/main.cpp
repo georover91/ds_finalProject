@@ -134,5 +134,7 @@ void OpenFile_and_Initialize(DbManager<ItemType>& DbM)
 	}
 
 	DbM.Initialize(inFile);	//
+
+	inFile.seekg(0, ios::beg);		// 파일 읽기 시작하는 위치 초기화 . 이거 안해주면, 다음에 다시 같은 이름의 파일 열어서 읽으면, 그 파일이 열리긴 열리나, 파일 다 끝난 부분부터 읽어서 오류남.
 	inFile.close();
 }
