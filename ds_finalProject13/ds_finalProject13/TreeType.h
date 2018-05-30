@@ -33,7 +33,7 @@ public:
 	void MakeInQueEmpty();
 	bool IsEmpty() const;
 	bool IsFull() const;
-	int LengthIs() const;
+	int EleNumIs() const;
 	TreeNode<_ItemType>* RootIs() const;
 	void InsertItem(_ItemType item);
 	void DeleteItem(_ItemType item);
@@ -50,5 +50,6 @@ protected:
 	Que<_ItemType> preQue;
 	Que<_ItemType> inQue;
 	Que<_ItemType> postQue;
-	int length;
+	int eleNum;
+	int maxLength;
 };

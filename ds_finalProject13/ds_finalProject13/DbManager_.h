@@ -340,6 +340,9 @@ void DbManager<_ItemType>::Search()
 
 		searchNum++;
 	}
+	else {
+		cout << "이전 검색결과와 같습니다. 새로운 검색을 진행하지 않습니다." << endl;
+	}
 }
 
 template<class _ItemType>
@@ -414,16 +417,22 @@ void DbManager<_ItemType>::Search_or_not(Tree<_ItemType>*& newDbPtr)
 template<class _ItemType>
 void DbManager<_ItemType>::allData()
 {
-	myDbBackStack.Push(allDbPtr);
-	myDbForwardStack.MakeEmpty();
-	myCurrDbPtr = allDbPtr;
+	if ((*myCurrDbPtr) != (*allDbPtr)) {
+		myDbBackStack.Push(allDbPtr);
+		myDbForwardStack.MakeEmpty();
+		myCurrDbPtr = allDbPtr;
 
-	oper = "all data";
-	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
-	key = "\0";
-	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
+		oper = "all data";
+		operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
+		key = "\0";
+		operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
 
-	searchNum++;
+		searchNum++;
+	}
+	else {
+		cout << "이전 검색결과와 같습니다. 새로운 검색을 진행하지 않습니다." << endl;
+	}
+	
 }
 ///////////////////////////////////////////////////
 

@@ -26,7 +26,7 @@ template<class _ItemType>
 Tree<_ItemType>::Tree()
 {
 	root = NULL;
-	length = 0;
+	eleNum = 0;
 }
 ///
 
@@ -58,7 +58,7 @@ void Tree<_ItemType>::MakeEmpty()
 {
 	Destroy(root);
 	root = NULL;
-	length = 0;
+	eleNum = 0;
 }
 
 template<class _ItemType>
@@ -138,13 +138,19 @@ bool Tree<_ItemType>::operator!=(const Tree<_ItemType>& anotherTree)
 template<class _ItemType>
 bool Tree<_ItemType>::compareTrees(TreeNode<_ItemType>* thisRoot, TreeNode<_ItemType>* anotherRoot)
 {
-	if ((thisRoot == NULL) || (anotherRoot == NULL)) {
+	if ((thisRoot == NULL) && (anotherRoot == NULL)) {
 		return true;
+	}
+	else if ((thisRoot != NULL) && (anotherRoot == NULL)) {
+		return false;
+	}
+	else if ((thisRoot == NULL) && (anotherRoot != NULL)) {
+		return false;
 	}
 	// root->info != anotherRoot->info
 	// compareTrees(thisRoot->leftPtr, anotherRoot->leftPtr);
 	//compareTrees(thisRoot->rightPtr, anotherRoot->rightPtr);
-	if (thisRoot->info != anotherRoot->info) {
+	if ((thisRoot->info) != (anotherRoot->info)) {
 		return false;
 	}
 	else if (compareTrees(thisRoot->leftPtr, anotherRoot->leftPtr) == false) {
@@ -313,7 +319,7 @@ Tree<_ItemType> Tree<_ItemType>::operator*(Tree<_ItemType>& operand)
 
 
 
-// IsEmpty & IsFull & LengthIs & Rootis /////////////////////////////////////////////////
+// IsEmpty & IsFull & EleNumIs & Rootis /////////////////////////////////////////////////
 template<class _ItemType>
 bool Tree<_ItemType>::IsEmpty() const
 // Returns true if the tree is empty; false otherwise.
@@ -342,7 +348,7 @@ bool Tree<_ItemType>::IsFull() const
 int CountNodes(TreeNode<ItemType>* tree);
 
 template<class _ItemType>
-int Tree<_ItemType>::LengthIs() const
+int Tree<_ItemType>::EleNumIs() const
 // Calls recursive function CountNodes to count the 
 // nodes in the tree.
 {
@@ -380,7 +386,7 @@ void Tree<_ItemType>::InsertItem(_ItemType item)
 	
 	//if (!found) {
 		Insert(root, item);
-		length++;
+		eleNum++;
 	//}
 }
 
@@ -413,7 +419,7 @@ void Tree<_ItemType>::DeleteItem(_ItemType item)
 // Calls recursive function Delete to delete item from tree.
 {
 	Delete(root, item);
-	length--;
+	eleNum--;
 }
 
 void Delete(TreeNode<ItemType>*& tree, ItemType item)
