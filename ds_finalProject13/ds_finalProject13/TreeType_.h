@@ -27,6 +27,7 @@ Tree<_ItemType>::Tree()
 {
 	root = NULL;
 	eleNum = 0;
+	maxLength = 0;
 }
 ///
 
@@ -59,6 +60,7 @@ void Tree<_ItemType>::MakeEmpty()
 	Destroy(root);
 	root = NULL;
 	eleNum = 0;
+	maxLength = 0;
 }
 
 template<class _ItemType>
@@ -365,10 +367,18 @@ int CountNodes(TreeNode<ItemType>* tree)
 }
 
 template<class _ItemType>
-TreeNode<_ItemType>* Tree<_ItemType>::RootIs()  const
+int Tree<_ItemType>::MaxLengthIs() const
+{
+	return maxLength;
+}
+
+template<class _ItemType>
+TreeNode<_ItemType>* Tree<_ItemType>::RootIs() const
 {
 	return root;
 }
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -387,6 +397,10 @@ void Tree<_ItemType>::InsertItem(_ItemType item)
 	//if (!found) {
 		Insert(root, item);
 		eleNum++;
+		
+		if (item.length() > maxLength) {
+			maxLength = item.length();
+		}
 	//}
 }
 

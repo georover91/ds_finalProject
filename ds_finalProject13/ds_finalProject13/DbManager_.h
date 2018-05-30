@@ -24,6 +24,19 @@ DbManager<_ItemType>::DbManager()
 	key = "\0";
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
+
+
+	////////// 이 부분은 initialize 맴버함수에는 없지만, 생성자와  MakeEmpty 맴버함수에는 있는 코딩 부분.///
+	// 검색횟수 및 명령횟수 초기화.
+	searchNum = 0;
+	cumNum = 0;
+
+
+	// 명령어, 검색 연산자, 검색어 저장하는 문자열 초기화.
+	command = "\0";
+	oper = "\0";
+	key = "\0";
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 template<class _ItemType>
@@ -48,6 +61,17 @@ DbManager<_ItemType>::DbManager(Tree<_ItemType> T1)
 	key = "\0";
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
+
+
+	// 검색횟수 및 명령횟수 초기화.
+	searchNum = 0;
+	cumNum = 0;
+
+
+	// 명령어, 검색 연산자, 검색어 저장하는 문자열 초기화.
+	command = "\0";
+	oper = "\0";
+	key = "\0";
 }
 
 template<class _ItemType>
@@ -89,12 +113,25 @@ DbManager<_ItemType>::DbManager(ifstream& inFile)
 	key = "\0";
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
 	operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
+
+
+	// 검색횟수 및 명령횟수 초기화.
+	searchNum = 0;
+	cumNum = 0;
+
+
+	// 명령어, 검색 연산자, 검색어 저장하는 문자열 초기화.
+	command = "\0";
+	oper = "\0";
+	key = "\0";
 }
 
 template<class _ItemType>
 DbManager<_ItemType>::~DbManager()
 {
+	cout << "프로그램을 종료하는 중 입니다..." << endl;
 	MakeEmpty();
+	cout << "프로그램을 종료합니다." << endl;
 }
 
 template<class _ItemType>
@@ -103,8 +140,12 @@ void DbManager<_ItemType>::MakeEmpty()
 	// allDb 및 allDbPtr 초기화.
 	Tree<_ItemType>* tempPtr;
 
+	//////아래 while문 2개에서 자꾸 오류 났는데, all data 명령어에 의해 실행되어 생긴, 두 포잍터가 하나의 같은 객체를 가리키는 경우가 생겨서, 그 객체 delete 하는데 이중으로 객체가 소멸시도 된 듯.
 	while (!myDbBackStack.IsEmpty()) {
 		myDbBackStack.Top(tempPtr);
+		////// 아래의 두 첫번째 세번째 문장이 연속해서 실행되는 것은 하나의 두번째 문장이 실행되는 것과 같다?
+		tempPtr->MakeEmpty();
+		tempPtr->~Tree();
 		delete tempPtr;
 		myDbBackStack.Pop();
 	}
@@ -112,6 +153,9 @@ void DbManager<_ItemType>::MakeEmpty()
 
 	while (!myDbForwardStack.IsEmpty()) {
 		myDbForwardStack.Top(tempPtr);
+		////// 아래의 두 첫번째 세번째 문장이 연속해서 실행되는 것은 하나의 두번째 문장이 실행되는 것과 같다?
+		tempPtr->MakeEmpty();
+		tempPtr->~Tree();
 		delete tempPtr;
 		myDbForwardStack.Pop();
 	}
@@ -273,7 +317,7 @@ template<class _ItemType>
 void DbManager<_ItemType>::goForward()
 {
 	if (myDbForwardStack.IsEmpty()) {		// 앞으로갈 저장상태가 없으면,
-		cout << "더이상 앞로 되돌릴 Data Base History가 없습니다." << endl;
+		cout << "더이상 앞으로 갈 Data Base History가 없습니다." << endl;
 		return;	//아무 실행 안하고 함수 종료.
 	}
 	else {
@@ -417,10 +461,14 @@ void DbManager<_ItemType>::Search_or_not(Tree<_ItemType>*& newDbPtr)
 template<class _ItemType>
 void DbManager<_ItemType>::allData()
 {
-	if ((*myCurrDbPtr) != (*allDbPtr)) {
-		myDbBackStack.Push(allDbPtr);
+	Tree<_ItemType>* tempPtr;
+	tempPtr = new Tree<_ItemType>;
+	(*tempPtr) = (*allDbPtr);		// (*tempPtr) Tree 객체에, 초기 데이터베이스 객체(*allDbPtr)의 원소값들을 그대로 복사하여 구성.
+
+	if ((*myCurrDbPtr) != (*tempPtr)) {
+		myDbBackStack.Push(tempPtr);
 		myDbForwardStack.MakeEmpty();
-		myCurrDbPtr = allDbPtr;
+		myCurrDbPtr = tempPtr;
 
 		oper = "all data";
 		operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
@@ -512,9 +560,55 @@ void DbManager<_ItemType>::Input_command()
 
 // Print ////////////////////////////////////////////////////////////////////
 template<class _ItemType>
-void DbManager<_ItemType>::Print_myCurrDb()
+void DbManager<_ItemType>::Print_Nth_Search()
 {
-	myCurrDbPtr->Print();
+	//(A * ((*myCurrDbPtr).MaxLengthIs()) - B)	
+	//영어 문자열인 경우, A = 1
+	//한글 및 기타 유니코드 문자열인 경우, A = 2
+	//B는 무조건 출력되는 최소 경계선 길이
+	//(*myCurrDbPtr).MaxLengthIs() : 출력되는 검색결과의 문장 중 가장 긴 문장의 길이.
+	//출력되는 문자열 중 가장 긴 문자열의 길이만큼 경게선 길이를 늘리기 위해 도입한 숫자 계산.
+
+
+	cout << endl;
+	if (searchNum == 0) {
+		cout << "<<<" << "초기 데이터베이스" << ">>>" << "=============";
+		for (int i = 0; i < (1 * ((*myCurrDbPtr).MaxLengthIs()) - 36); i++) {
+			cout << "=";
+		}
+		cout << endl;
+	}
+	else {
+		cout << "<<<" << searchNum << "번째 검색결과" << ">>>" << "================";
+		for (int i = 0; i < (1 * ((*myCurrDbPtr).MaxLengthIs()) - 36); i++) {
+			cout << "=";
+		}
+		cout << endl;
+	}
+
+	cout << "---검색 연산자 및 검색어 히스토리---";
+	for (int i = 0; i < (1 * ((*myCurrDbPtr).MaxLengthIs()) - 36); i++) {
+		cout << "-";
+	}
+	cout << endl;
+
+	Print_searchPath();		///////////
+
+	cout << "------------------------------------";
+	for (int i = 0; i < (1 * ((*myCurrDbPtr).MaxLengthIs()) - 36); i++) {
+		cout << "-";
+	}
+	cout << endl;
+
+	Print_myCurrDb();		//////////
+
+	cout << "====================================";
+	for (int i = 0; i < (1 * ((*myCurrDbPtr).MaxLengthIs()) - 36); i++) {
+		cout << "=";
+	}
+	cout << endl;
+
+	cout << endl;
 }
 
 template<class _ItemType>
@@ -524,21 +618,9 @@ void DbManager<_ItemType>::Print_searchPath()
 }
 
 template<class _ItemType>
-void DbManager<_ItemType>::Print_Nth_Search()
+void DbManager<_ItemType>::Print_myCurrDb()
 {
-	cout << endl;
-	if (searchNum == 0) {
-		cout << "<<<" << "초기 데이터베이스" << ">>>" << "==============================================================" << endl;
-	}
-	else {
-		cout << "<<<" << searchNum << "번째 검색결과" << ">>>" << "====================================================================" << endl;
-	}
-	cout << "---검색 연산자 및 검색어 히스토리----------------------------------------------------" << endl;
-	Print_searchPath();
-	cout << "-------------------------------------------------------------------------------------" << endl;
-	Print_myCurrDb();
-	cout << "=====================================================================================" << endl;
-	cout << endl;
+	myCurrDbPtr->Print();
 }
 
 template<class _ItemType>

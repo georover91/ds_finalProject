@@ -34,6 +34,7 @@ public:
 	bool IsEmpty() const;
 	bool IsFull() const;
 	int EleNumIs() const;
+	int MaxLengthIs() const;
 	TreeNode<_ItemType>* RootIs() const;
 	void InsertItem(_ItemType item);
 	void DeleteItem(_ItemType item);
@@ -50,6 +51,6 @@ protected:
 	Que<_ItemType> preQue;
 	Que<_ItemType> inQue;
 	Que<_ItemType> postQue;
-	int eleNum;
-	int maxLength;
+	unsigned int eleNum;
+	unsigned int maxLength;		// Tree의 원소인 문자열 중 가장 긴 문자열 길이를 가진 문자열의 문자열 길이.
 };

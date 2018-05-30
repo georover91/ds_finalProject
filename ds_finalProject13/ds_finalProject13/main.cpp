@@ -8,7 +8,6 @@ void OpenFile_and_Initialize(DbManager<ItemType>& DbM);
 
 int main()
 {
-	
 	DbManager<ItemType> DbM;
 
 	//입력파일로 검색기의 초기 데이터베이스 구성.
