@@ -102,10 +102,10 @@ int main()
 			OpenFile_and_Initialize(DbM);
 			DbM.Print_Nth_Search();
 		}
-		else if (DbM.command == "select") {
-
-		}
 		else if (DbM.command == "print") {
+			DbM.Print_Nth_Search();
+		}
+		else if (DbM.command == "select") {
 
 		}
 
