@@ -266,8 +266,8 @@ void  DbManager<_ItemType>::Initialize(ifstream& inFile)
 	else {
 		cout << "Command Error. or Data Error." << endl;
 	}
-	cout << endl;
-	cout << endl;
+	//cout << endl;
+	//cout << endl;
 
 
 	// myCurrDbPtr 초기 구성.
@@ -548,6 +548,7 @@ void DbManager<_ItemType>::Input_command()
 {
 	cout << endl;
 	cout << endl;
+	cout << endl;
 	cumNum++;
 	cout << "<<<" << cumNum << "번째 명령" << ">>>" << endl;
 	cout << "프로그램 실행명령을 입력하세요: ";
@@ -581,7 +582,7 @@ void DbManager<_ItemType>::Print_SearchScreen(printTo PT, printDirection PD, pri
 
 
 	if (PT == CONSOLE_) {
-		cout << endl;
+		//cout << endl;
 		if (searchNum == 0) {
 			cout << setw(screenWide) << setfill('=') << setiosflags(ios::left) << "<<<초기 데이터베이스>>>";
 			cout << endl;
@@ -621,7 +622,7 @@ void DbManager<_ItemType>::Print_SearchScreen(printTo PT, printDirection PD, pri
 		cout << setw(screenWide) << setfill('=') << "=";
 		cout << endl;
 
-		cout << endl;
+		//cout << endl;
 	}
 	else if (PT == FILE_) {		
 		string outputFileName;
@@ -634,7 +635,7 @@ void DbManager<_ItemType>::Print_SearchScreen(printTo PT, printDirection PD, pri
 			exit(1);
 		}
 
-		outFile << endl;
+		//outFile << endl;
 		if (searchNum == 0) {
 			outFile << setw(screenWide) << setfill('=') << setiosflags(ios::left) << "<<<초기 데이터베이스>>>";
 			outFile << endl;
@@ -672,7 +673,7 @@ void DbManager<_ItemType>::Print_SearchScreen(printTo PT, printDirection PD, pri
 		outFile << setw(screenWide) << setfill('=') << "=";
 		outFile << endl;
 
-		outFile << endl;
+		//outFile << endl;
 
 		cout << "파일에 출력이 완료되었습니다." << endl;
 		outFile.close();
@@ -906,6 +907,125 @@ void DbManager<_ItemType>::Print_SearchDb(printTo PT, printDirection PD, printWi
 			else if (PWN == WITH_NUM_) {
 
 			}
+		}
+	}
+}
+
+template<class _ItemType>
+void DbManager<_ItemType>::Print_Settings(string& what, printTo& pt, printDirection& pd, printWithNum& pwn)
+{
+	string WHAT_ = " ";
+	string PT_ = " ";
+	string PD_ = " ";
+	string PWN_ = " ";
+
+	//메인함수 윗부분으로 이동.
+	//string what = "screen";
+	//printTo pt;
+	//printDirection pd;
+	//printWithNum pwn;
+
+	cout << "현재의 출력서식:   1) ";
+	//what
+	if ((what == "search screen") || (what == "screen")) {
+		cout << "screen을   2) ";
+	}
+	else if ((what == "search route") || (what == "route")) {
+		cout << "reute를   2) ";
+	}
+	else if ((what == "search data") || (what == "data")) {
+		cout << "data를   2) ";
+	}
+	//pt
+	if (pt == CONSOLE_) {
+		cout << "console에   3) ";
+	}
+	else if (pt == FILE_) {
+		cout << "file에   3) ";
+	}
+	else if (pt == MY_WRITING_) {
+		cout << "myWriting에   3) ";
+	}
+	//pd
+	if (pd == NONE_) {
+		cout << "오름차순으로   4) ";
+	}
+	else if (pd == REVERSE_) {
+		cout << "내림차순으로   4) ";
+	}
+	//pwn
+	if (pwn == WITH_NUM_) {
+		cout << "번호를 붙여   출력합니다.";
+	}
+	else if (pwn == NONE__) {
+		cout << "번호를 붙이지 않고   출력합니다.";
+	}
+	cout << endl;
+	cout << "사용자 설정에 따라 출력한 후에는,   1) screen을   2) console에 출력하는 것으로,   자동 초기화 합니다." << endl;
+	cout << "나머지 서식은 이전 설정을 유지합니다." << endl;
+
+
+	while ((WHAT_ != "\0") && (WHAT_ != "search screen") && (WHAT_ != "screen") && (WHAT_ != "search route") && (WHAT_ != "route") && (WHAT_ != "search data") && (WHAT_ != "data")) {
+		cout << "1) 무엇을 출력할까요?: ";
+		getline(cin, WHAT_);
+	}
+	if (WHAT_ == "\0") {
+		//what = what;		//이전 상태 유지.
+	}
+	else if ((WHAT_ == "search screen") || (WHAT_ == "screen")) {
+		what = WHAT_;
+	}
+	else if ((WHAT_ == "search route") || (WHAT_ == "route")) {
+		what = WHAT_;
+	}
+	else if ((WHAT_ == "search data") || (WHAT_ == "data")) {
+		what = WHAT_;
+	}
+
+	while ((PT_ != "\0") && (PT_ != "console") && (PT_ != "file") && (PT_ != "myWriting")) {
+		cout << "2) 어디에 출력할까요?: ";
+		getline(cin, PT_);
+	}
+	if (PT_ == "\0") {
+		//pt = pt;		//이전 상태 유지.
+	}
+	else if (PT_ == "console") {
+		pt = CONSOLE_;
+	}
+	else if (PT_ == "file") {
+		pt = FILE_;
+	}
+	else if (PT_ == "myWriting") {
+		pt = MY_WRITING_;
+	}
+
+	if ((what != "search route") && (what != "route")) {
+		while ((PD_ != "\0") && (PD_ != "in order") && (PD_ != "reverse")) {
+			cout << "3) 어떤 순서로 출력할까요?: ";
+			getline(cin, PD_);
+		}
+		if (PD_ == "\0") {
+			//pd = pd;		//이전 상태 유지.
+		}
+		else if (PD_ == "in order") {
+			pd = NONE_;
+		}
+		else if (PD_ == "reverse") {
+			pd = REVERSE_;
+		}
+
+		while ((PWN_ != "\0") && (PWN_ != "yes") && (PWN_ != "no") && (PWN_ != "with numbering") && (PWN_ != "without numbering")) {
+			cout << "4) 출력되는 순서에 따라 번호를 붙여 출력할까요?: ";
+			getline(cin, PWN_);
+		}
+		if (PWN_ == "\0") {
+			//pwn = pwn;		//이전 상태 유지.
+		}
+		else if ((PWN_ == "yes") || (PWN_ == "with numbering")) {
+			pwn = WITH_NUM_;
+		}
+		else if ((PWN_ == "no") || (PWN_ == "without numbering")) {
+			pwn = NONE__;
 		}
 	}
 }

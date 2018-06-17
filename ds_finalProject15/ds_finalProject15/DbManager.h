@@ -47,6 +47,7 @@ public:
 	void Print_SearchRoute(printTo PT);
 	void Print_SearchScreen();
 	void Print_SearchScreen(printTo PT, printDirection PD, printWithNum PWN);
+	void Print_Settings(string& what, printTo& pt, printDirection& pd, printWithNum& pwn);
 	void Print_to_myWriting();
 	void Print_to_file();
 

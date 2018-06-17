@@ -13,13 +13,15 @@ int main()
 	DbManager<ItemType> DbM;
 
 	// 출력을 위한 변수들 선언.
+	string what = "search screen";
 	printTo pt = CONSOLE_;
 	printDirection pd = NONE_;
 	printWithNum pwn= NONE__;
 
 	//입력파일로 검색기의 초기 데이터베이스 구성.
 	OpenFile_and_InitializeFromFile(DbM);
-	DbM.Print_SearchScreen();
+	cout << endl;
+	DbM.Print_SearchScreen(pt, pd, pwn);
 
 	// 본격적으로 string DB 검색 프로그램을 실행.
 	DbM.Input_command();
@@ -28,11 +30,13 @@ int main()
 	{
 		if (DbM.command == "go back") {
 			DbM.goBackward();
-			DbM.Print_SearchScreen();
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "go forward") {
 			DbM.goForward();
-			DbM.Print_SearchScreen();
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "search") {
 			while (1) {
@@ -48,11 +52,13 @@ int main()
 				getline(cin, DbM.key);
 
 				DbM.Search();
-				DbM.Print_SearchScreen();
+				cout << endl;
+				DbM.Print_SearchScreen(pt, pd, pwn);
 			}
 			else {
 				DbM.allData();
-				DbM.Print_SearchScreen();
+				cout << endl;
+				DbM.Print_SearchScreen(pt, pd, pwn);
 			}
 		
 		}
@@ -63,7 +69,8 @@ int main()
 			getline(cin, DbM.key);
 
 			DbM.Search();
-			DbM.Print_SearchScreen();
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "or") {
 			DbM.oper = "or";
@@ -72,7 +79,8 @@ int main()
 			getline(cin, DbM.key);
 
 			DbM.Search();
-			DbM.Print_SearchScreen();
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "not") {
 			DbM.oper = "not";
@@ -81,7 +89,8 @@ int main()
 			getline(cin, DbM.key);
 
 			DbM.Search();
-			DbM.Print_SearchScreen();
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "and not") {
 			DbM.oper = "and not";
@@ -90,7 +99,8 @@ int main()
 			getline(cin, DbM.key);
 
 			DbM.Search();
-			DbM.Print_SearchScreen();
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "or not") {
 			DbM.oper = "or not";
@@ -99,81 +109,38 @@ int main()
 			getline(cin, DbM.key);
 
 			DbM.Search();
-			DbM.Print_SearchScreen();
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "all data") {
 			DbM.allData();
-			DbM.Print_SearchScreen();
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "initialize") {
 			OpenFile_and_InitializeFromFile(DbM);
-			DbM.Print_SearchScreen();
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "print") {
-			string what_ = " ";
-			string PT_ = " ";
-			string PD_ = " ";
-			string PWN_ = " ";
-
-			//메인함수 윗부분으로 이동.
-			//printTo pt;
-			//printDirection pd;
-			//printWithNum pwn;
-
-			while ((what_ != "search screen") && (what_ != "search route") && (what_ != "search data")) {
-				cout << "무엇을 출력할까요?: ";
-				getline(cin, what_);
-			}
+			DbM.Print_Settings(what, pt, pd, pwn);
 			
-			while ((PT_ != "console") && (PT_ != "file") && (PT_ != "myWriting")) {
-				cout << "어디에 출력할까요?: ";
-				getline(cin, PT_);
-			}
-			if ((PT_ == "\0") || (PT_ == "console")) {
-				pt = CONSOLE_;
-			}
-			if (PT_ == "file") {
-				pt = FILE_;
-			}
-			if (PT_ == "myWriting") {
-				pt = MY_WRITING_;
-			}			
-
-			if (what_ != "search route") {
-				while ((PD_ != "\0") && (PD_ != "in order") && (PD_ != "reverse")) {
-					cout << "어떤 순서로 출력할까요?: ";
-					getline(cin, PD_);
-				}
-				if ((PD_ == "\0") || (PD_ == "in order")) {
-					pd = NONE_;
-				}
-				if (PD_ == "reverse") {
-					pd = REVERSE_;
-				}
-
-				while ((PWN_ != "yes") && (PWN_ != "no") && (PWN_ != "with numbering") && (PWN_ != "without numbering")) {
-					cout << "출력되는 순서에 따라 번호를 붙여 출력할까요?: ";
-					getline(cin, PWN_);
-				}
-				if ((PWN_ == "yes") || (PWN_ == "with numbering")) {
-					pwn = WITH_NUM_;
-				}
-				if ((PWN_ == "\0") || (PWN_ == "no") || (PWN_ == "without numbering")) {
-					pwn = NONE__;
-				}
-			}
-			
-			if (what_ == "search screen") {
+			if ((what == "search screen") || (what == "screen")) {
+				cout << endl;
 				DbM.Print_SearchScreen(pt, pd, pwn);
 			}
-			else if (what_ == "search route") {
+			else if ((what == "search route") || (what == "route")) {
+				cout << endl;
 				DbM.Print_SearchRoute(pt);
 			}
-			else if (what_ == "search data") {
+			else if ((what == "search data") || (what == "data")) {
+				cout << endl;
 				DbM.Print_SearchDb(pt, pd, pwn);
 			}
 
+			cout << endl;
 			//출력 기능을 다 수행하면, 출력 옵션 중 pt를 console에 출력하는 설정으로 초기화.
+			what = "search screen";
 			pt = CONSOLE_;
 		}
 		else if (DbM.command == "select") {
@@ -214,7 +181,7 @@ void OpenFile_and_InitializeFromFile(DbManager<ItemType>& DbM)
 	string inputFileName;
 	cout << "검색기의 초기 데이터베이스를 구성할 입력파일의 이름을 입력하세요: ";
 	getline(cin, inputFileName);
-	cout << endl;
+	//cout << endl;
 
 	ifstream inFile(inputFileName.c_str());	//초기 데이터 베이스는 파일(초기DB구성파일) 하나에서 읽어와 구성.
 	if (!inFile.is_open()) {
