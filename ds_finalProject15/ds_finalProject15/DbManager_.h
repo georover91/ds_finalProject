@@ -1042,3 +1042,57 @@ void DbManager<_ItemType>::Print_to_file()
 
 }
 ////////////////////////////////////////////////////////////////////////////
+
+template<class _ItemType>
+void DbManager<_ItemType>::select(printDirection& pd, int n)
+{
+	_ItemType tempString;
+	Tree<_ItemType>* newTempTreePtr = new Tree<_ItemType>;
+	bool finished = false;
+
+	if (pd == NONE_) {
+		myCurrDbPtr->ResetTree(IN_ORDER);
+		int i = 0;
+		while ((i < n) && (!finished)) {
+			myCurrDbPtr->GetNextItem(tempString, IN_ORDER, finished);
+			i++;
+		}
+
+		myCurrDbPtr->MakeInQueEmpty();
+	}
+	else if (pd == REVERSE_) {
+		myCurrDbPtr->ResetTree(REVERSE_ORDER);
+		int i = 0;
+		while ((i < n) && (!finished)) {
+			myCurrDbPtr->GetNextItem(tempString, REVERSE_ORDER, finished);
+			i++;
+		}
+
+		myCurrDbPtr->MakeReverseQueEmpty();
+	}
+
+	if (finished == false) {
+		newTempTreePtr->InsertItem(tempString);
+
+		if ((*myCurrDbPtr) != (*newTempTreePtr)) {
+			myDbBackStack.Push(newTempTreePtr);
+			myDbForwardStack.MakeEmpty();
+			myCurrDbPtr = newTempTreePtr;
+
+			oper = "select";
+			operKeyDoubleLL.Insert_with_Deleting_nextPos(oper);
+			key = std::to_string(n);
+			operKeyDoubleLL.Insert_with_Deleting_nextPos(key);
+
+			searchNum++;
+		}
+		else {
+			cout << "이전 검색결과와 같습니다. 새로운 검색을 진행하지 않습니다." << endl;
+		}
+	}
+	else {
+		cout << "데이터의 갯수보다 큽니다." << endl;
+		cout << "이전 검색결과와 같습니다. 새로운 검색을 진행하지 않습니다." << endl;
+	}
+	
+}

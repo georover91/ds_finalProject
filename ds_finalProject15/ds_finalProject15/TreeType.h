@@ -11,7 +11,7 @@ struct TreeNode
 	_ItemType info;
 	TreeNode<_ItemType>* rightPtr;
 };
-enum OrderType { PRE_ORDER, IN_ORDER, POST_ORDER };
+enum OrderType { PRE_ORDER, IN_ORDER, POST_ORDER, REVERSE_ORDER };
 
 template<class _ItemType>
 class Tree
@@ -31,6 +31,7 @@ public:
 	Tree<_ItemType> operator*(Tree<_ItemType>& operand);
 	void MakeEmpty();
 	void MakeInQueEmpty();
+	void MakeReverseQueEmpty();
 	bool IsEmpty() const;
 	bool IsFull() const;
 	int EleNumIs() const;
@@ -56,6 +57,7 @@ protected:
 	Que<_ItemType> preQue;
 	Que<_ItemType> inQue;
 	Que<_ItemType> postQue;
+	Que<_ItemType> reverseQue;
 	unsigned int eleNum;
 	unsigned int maxLength;		// Tree의 원소인 문자열 중 가장 긴 문자열 길이를 가진 문자열의 문자열 길이.
 };

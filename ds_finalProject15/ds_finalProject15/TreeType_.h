@@ -68,6 +68,12 @@ void Tree<_ItemType>::MakeInQueEmpty()
 {
 	inQue.MakeEmpty();
 }
+
+template<class _ItemType>
+void Tree<_ItemType>::MakeReverseQueEmpty()
+{
+	reverseQue.MakeEmpty();
+}
 ///
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -729,6 +735,7 @@ void PrintTree_Reverse_with_Num(TreeNode<ItemType>* tree, int& i, std::ofstream&
 void PreOrder(TreeNode<ItemType>*, Que<ItemType>&);		// Enqueues tree items in preorder.
 void InOrder(TreeNode<ItemType>*, Que<ItemType>&);		// Enqueues tree items in inorder.
 void PostOrder(TreeNode<ItemType>*, Que<ItemType>&);	// Enqueues tree items in postorder.
+void ReverseOrder(TreeNode<ItemType>*, Que<ItemType>&);		// Enqueues tree items in reverse order.
 
 template<class _ItemType>
 void Tree<_ItemType>::ResetTree(OrderType order)
@@ -742,6 +749,8 @@ void Tree<_ItemType>::ResetTree(OrderType order)
 	case IN_ORDER: InOrder(root, inQue);
 		break;
 	case POST_ORDER: PostOrder(root, postQue);
+		break;
+	case REVERSE_ORDER: ReverseOrder(root, reverseQue);
 		break;
 	}
 }
@@ -779,6 +788,18 @@ void PostOrder(TreeNode<ItemType>* tree, Que<ItemType>& postQue)
 	}
 }
 
+void ReverseOrder(TreeNode<ItemType>* tree, Que<ItemType>& reverseQue)
+{
+	if (tree != NULL)
+	{
+		ReverseOrder(tree->rightPtr, reverseQue);
+		reverseQue.Enqueue(tree->info);
+		ReverseOrder(tree->leftPtr, reverseQue);
+	}
+}
+
+
+
 template<class _ItemType>
 void Tree<_ItemType>::GetNextItem(_ItemType& item, OrderType order, bool& finished)
 // Returns the next item in the desired order.
@@ -799,6 +820,10 @@ void Tree<_ItemType>::GetNextItem(_ItemType& item, OrderType order, bool& finish
 		break;
 	case  POST_ORDER: postQue.Dequeue(item);
 		if (postQue.IsEmpty())
+			finished = true;
+		break;
+	case  REVERSE_ORDER: reverseQue.Dequeue(item);
+		if (reverseQue.IsEmpty())
 			finished = true;
 		break;
 	}

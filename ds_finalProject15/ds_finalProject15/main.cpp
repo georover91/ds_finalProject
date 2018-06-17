@@ -144,7 +144,13 @@ int main()
 			pt = CONSOLE_;
 		}
 		else if (DbM.command == "select") {
+			int n;
+			cout << "선택할 데이터의 번째수를 입력하세요: ";
+			cin >> n;
+			DbM.select(pd, n);
 
+			cout << endl;
+			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 
 		DbM.Input_command();

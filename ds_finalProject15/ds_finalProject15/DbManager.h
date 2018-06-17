@@ -50,6 +50,7 @@ public:
 	void Print_Settings(string& what, printTo& pt, printDirection& pd, printWithNum& pwn);
 	void Print_to_myWriting();
 	void Print_to_file();
+	void select(printDirection& pd, int n);
 
 	int cumNum;
 	int searchNum;
@@ -75,5 +76,5 @@ private:
 	//DoubleLL<_ItemType> keyDoubleLL;
 	DoubleLL<_ItemType> operKeyDoubleLL;
 	
-	DoubleLL<_ItemType> myWriting;
+	//DoubleLL<_ItemType> myWriting;
 };
