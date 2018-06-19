@@ -1,9 +1,12 @@
-// 1.	현재 프로젝트에서 자료구조를 짜놓은 구조상,
-//		Tree 객체에 InsertItem 또는 DeleteItem 등을 하여 원소가 바뀌면, preQue, inQue, postQue 모두 갱신해줘야 함!!!
-// 2.	함수 선언을 제대로 안하고, 정의 내용부터 짜면, 컴파일러가 그 함수 안의 내용이 맞는지 제대로 체크를 못해준다.
-// 3.	
+// 집합의 개념을 이용한 문자열 검색기
+// 작성자: 구본익 (경희대학교 전자공학과)
+// 작성일: 2018년 5월 18일 시작 ~ 2018년 6월 17일 완성.
+// 스택, 더블링크드리스트, 그리고 트리의 기본적인 자료구조에 대한 수업자료 일부를 참고한 것 이외에는,
+// 전적으로 본인이 모두 직접 아이디어, 설계, 작성, 완성한 코딩이다.
 /////////////////////////////////////////////////////////////////////////////
 #include "DbManager_.h"
+
+
 
 void OpenFile_and_InitializeFromFile(DbManager<ItemType>& DbM);
 
@@ -12,21 +15,25 @@ int main()
 	//instanciating Database Manager class. 
 	DbManager<ItemType> DbM;
 
-	// 출력을 위한 변수들 선언.
+	// 출력서식설정을 위한 변수들 선언.
 	string what = "search screen";
 	printTo pt = CONSOLE_;
-	printDirection pd = NONE_;
-	printWithNum pwn= NONE__;
+	printDirection pd = IN_ORDER_;
+	printWithNum pwn= NONE_;
+
+
 
 	//입력파일로 검색기의 초기 데이터베이스 구성.
 	OpenFile_and_InitializeFromFile(DbM);
 	cout << endl;
 	DbM.Print_SearchScreen(pt, pd, pwn);
 
+
+
 	// 본격적으로 string DB 검색 프로그램을 실행.
 	DbM.Input_command();
 
-	while (DbM.command != "Quit")
+	while (DbM.command != "quit")
 	{
 		if (DbM.command == "go back") {
 			DbM.goBackward();
@@ -123,22 +130,27 @@ int main()
 			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
 		else if (DbM.command == "print") {
-			DbM.Print_Settings(what, pt, pd, pwn);
+			DbM.PrintSettings(what, pt, pd, pwn);
 			
 			if ((what == "search screen") || (what == "screen")) {
-				cout << endl;
+				if (pt != FILE_) {
+					cout << endl;
+				}
 				DbM.Print_SearchScreen(pt, pd, pwn);
 			}
 			else if ((what == "search route") || (what == "route")) {
-				cout << endl;
+				if (pt != FILE_) {
+					cout << endl;
+				}
 				DbM.Print_SearchRoute(pt);
 			}
 			else if ((what == "search data") || (what == "data")) {
-				cout << endl;
+				if (pt != FILE_) {
+					cout << endl;
+				}
 				DbM.Print_SearchDb(pt, pd, pwn);
 			}
 
-			cout << endl;
 			//출력 기능을 다 수행하면, 출력 옵션 중 pt를 console에 출력하는 설정으로 초기화.
 			what = "search screen";
 			pt = CONSOLE_;
@@ -152,34 +164,18 @@ int main()
 			cout << endl;
 			DbM.Print_SearchScreen(pt, pd, pwn);
 		}
+		else if (DbM.command == "number") {
+			int m;
+			m = DbM.SearchEleNum();
+			cout << "현재 검색결과의 데이터 갯수는 ";
+			cout << m << " 개 입니다." << endl;
+		}
 
 		DbM.Input_command();
 	};
-	
 
-
-
-	/*
-	// Tree 객체의 operator==, operator!= 오버로딩한 거 test하기 위한 code.
-	Tree<ItemType> T1;
-	T1.InsertItem("hello");
-	T1.InsertItem("world");
-	T1.InsertItem("z");
-
-	Tree<ItemType> T2;
-	T2.InsertItem("hello");
-	T2.InsertItem("world");
-	T2.InsertItem("z");
-
-	cout << (bool)(T1 != T2) << endl;
-	*/
-
-
-	
 	return 0;
 }
-
-
 
 void OpenFile_and_InitializeFromFile(DbManager<ItemType>& DbM)
 {

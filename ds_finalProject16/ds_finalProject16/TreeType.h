@@ -11,23 +11,24 @@ struct TreeNode
 	_ItemType info;
 	TreeNode<_ItemType>* rightPtr;
 };
+
 enum OrderType { PRE_ORDER, IN_ORDER, POST_ORDER, REVERSE_ORDER };
+
+
 
 template<class _ItemType>
 class Tree
 {
 public:
-	Tree();		// constructor
-	~Tree();	// destructor
+	Tree();		
+	~Tree();	
 	Tree(const Tree<_ItemType>& originalTree);
 	void operator=(const Tree<_ItemType>& originalTree);	// copy constructor
 	bool operator==(const Tree<_ItemType>& anotherTree);
 	bool operator!=(const Tree<_ItemType>& anotherTree);
 	bool compareTrees(TreeNode<_ItemType>* thisRoot, TreeNode<_ItemType>* anotherRoot);
 	Tree<_ItemType> operator+(Tree<_ItemType>& operand);
-	void Merge(Tree<_ItemType>& operand);
 	Tree<_ItemType> operator-(Tree<_ItemType>& operand);
-	void Extract(Tree<_ItemType>& operand);
 	Tree<_ItemType> operator*(Tree<_ItemType>& operand);
 	void MakeEmpty();
 	void MakeInQueEmpty();
@@ -41,8 +42,7 @@ public:
 	void DeleteItem(_ItemType item);
 	void RetrieveItem(_ItemType& item, bool& found);
 	void ResetTree(OrderType order);
-	void GetNextItem(_ItemType& item, OrderType order,
-		bool& finished);
+	void GetNextItem(_ItemType& item, OrderType order, bool& finished);
 	void Print() const;
 	void Print(std::ofstream& outFile) const;
 	void Print_with_Num() const;
@@ -52,7 +52,7 @@ public:
 	void Print_Reverse_with_Num() const;
 	void Print_Reverse_with_Num(std::ofstream& outFile) const;
 	
-protected:
+private:
 	TreeNode<_ItemType>* root;
 	Que<_ItemType> preQue;
 	Que<_ItemType> inQue;
